@@ -1,0 +1,25 @@
+{
+  "name": "primary_backend",
+  "version": "1.0.0",
+  "description": "Primarykey_backend_project ## ~10.28 Thur. 맡은부분 API 짜오기",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bishoe01/PRIMARY_BACKEND.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bishoe01/PRIMARY_BACKEND/issues"
+  },
+  "homepage": "https://github.com/bishoe01/PRIMARY_BACKEND#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql2": "^2.3.2",
+    "sequelize": "^6.9.0"
+  }
+}
