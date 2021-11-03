@@ -23,6 +23,12 @@ Primarykey_backend_project
 
 DATABASE_PASSWORD
 
+## ~11.02 Tues.
+
+각자 맡은 부분 api 최소 한 개 짜오기
+
+혜민 - server 구축 확인 필요
+
 
 ## ~11.04 Thur.
 
