@@ -39,3 +39,21 @@ api명세서 스프레드시트에 취합
 창선 - server - database 연결 확인 및 template 짜기
 
 혜민 - api명세서 확인 및 server 서브도메인 생성 (admin/user)
+
+
+## ~11.09 Tues.
+
+종문 - database, server 연결 확인 + api 작성해보기
+
+창선 - api 작성해보기
+
+혜민 - api 작성해보기
+
+
+
+## ~11.11 Thur.
+
+ 각자 맡은 부분 api 작성해보기
+ 더미데이터 생성하여 동작하는지 확인해볼 것.
+ 
+ (+데이터베이스 연동 잘 되는지 확인 필요)
