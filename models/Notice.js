@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Notice', {
+module.exports = (sequelize, DataTypes) => {
+  return Notice.init(sequelize, DataTypes);
+}
+
+class Notice extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     notice_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "공지사항 id"
     },
@@ -61,4 +66,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return Notice;
+  }
+}

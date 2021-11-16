@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Leave', {
+module.exports = (sequelize, DataTypes) => {
+  return Leave.init(sequelize, DataTypes);
+}
+
+class Leave extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     leave_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -10,7 +16,11 @@ module.exports = function(sequelize, DataTypes) {
     employee_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "직원id"
+      comment: "직원id",
+      references: {
+        model: 'Employee',
+        key: 'employee_id'
+      }
     },
     start_date: {
       type: DataTypes.DATEONLY,
@@ -67,6 +77,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "leave_id" },
         ]
       },
+      {
+        name: "FK_Employee_TO_Leave_1",
+        using: "BTREE",
+        fields: [
+          { name: "employee_id" },
+        ]
+      },
     ]
   });
-};
+  return Leave;
+  }
+}

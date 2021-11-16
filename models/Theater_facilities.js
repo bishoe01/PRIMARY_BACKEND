@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Theater_facilities', {
+module.exports = (sequelize, DataTypes) => {
+  return Theater_facilities.init(sequelize, DataTypes);
+}
+
+class Theater_facilities extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     facilities_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -52,4 +58,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return Theater_facilities;
+  }
+}

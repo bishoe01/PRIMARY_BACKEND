@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Holiday', {
+module.exports = (sequelize, DataTypes) => {
+  return Holiday.init(sequelize, DataTypes);
+}
+
+class Holiday extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     holiday_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -52,4 +58,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return Holiday;
+  }
+}

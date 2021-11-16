@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Facility', {
+module.exports = (sequelize, DataTypes) => {
+  return Facility.init(sequelize, DataTypes);
+}
+
+class Facility extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     facility_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -15,12 +21,20 @@ module.exports = function(sequelize, DataTypes) {
     facilities_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "시설물id"
+      comment: "시설물id",
+      references: {
+        model: 'Theater_facilities',
+        key: 'facilities_id'
+      }
     },
     department_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "부서id"
+      comment: "부서id",
+      references: {
+        model: 'Department',
+        key: 'department_id'
+      }
     },
     created_at: {
       type: DataTypes.DATE,
@@ -50,6 +64,22 @@ module.exports = function(sequelize, DataTypes) {
           { name: "facility_id" },
         ]
       },
+      {
+        name: "FK_Theater_facilities_TO_Facility_1",
+        using: "BTREE",
+        fields: [
+          { name: "facilities_id" },
+        ]
+      },
+      {
+        name: "FK_Department_TO_Facility_1",
+        using: "BTREE",
+        fields: [
+          { name: "department_id" },
+        ]
+      },
     ]
   });
-};
+  return Facility;
+  }
+}

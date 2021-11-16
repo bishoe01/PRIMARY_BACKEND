@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Menu', {
+module.exports = (sequelize, DataTypes) => {
+  return Menu.init(sequelize, DataTypes);
+}
+
+class Menu extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     menu_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -57,4 +63,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return Menu;
+  }
+}

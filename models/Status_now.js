@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Status_now', {
+module.exports = (sequelize, DataTypes) => {
+  return Status_now.init(sequelize, DataTypes);
+}
+
+class Status_now extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     status_now_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -10,7 +16,11 @@ module.exports = function(sequelize, DataTypes) {
     employee_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "직원Id"
+      comment: "직원Id",
+      references: {
+        model: 'Employee',
+        key: 'employee_id'
+      }
     },
     status: {
       type: DataTypes.STRING(255),
@@ -55,6 +65,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "status_now_id" },
         ]
       },
+      {
+        name: "FK_Employee_TO_Status_now_1",
+        using: "BTREE",
+        fields: [
+          { name: "employee_id" },
+        ]
+      },
     ]
   });
-};
+  return Status_now;
+  }
+}

@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Order_detail', {
+module.exports = (sequelize, DataTypes) => {
+  return Order_detail.init(sequelize, DataTypes);
+}
+
+class Order_detail extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     order_detail: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "주문상세 id"
     },
@@ -32,13 +37,21 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "상품 번호"
+      comment: "상품 번호",
+      references: {
+        model: 'Product',
+        key: 'product_id'
+      }
     },
     order_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "주문 id"
+      comment: "주문 id",
+      references: {
+        model: 'Order',
+        key: 'order_id'
+      }
     },
     created_at: {
       type: DataTypes.DATE,
@@ -68,6 +81,22 @@ module.exports = function(sequelize, DataTypes) {
           { name: "order_detail" },
         ]
       },
+      {
+        name: "FK_Product_TO_Order_detail_1",
+        using: "BTREE",
+        fields: [
+          { name: "product_id" },
+        ]
+      },
+      {
+        name: "FK_Order_TO_Order_detail_1",
+        using: "BTREE",
+        fields: [
+          { name: "order_id" },
+        ]
+      },
     ]
   });
-};
+  return Order_detail;
+  }
+}

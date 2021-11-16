@@ -1,41 +1,36 @@
 const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  return Cast.init(sequelize, DataTypes);
+  return Country_of_movie.init(sequelize, DataTypes);
 }
 
-class Cast extends Sequelize.Model {
+class Country_of_movie extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   super.init({
-    cast_id: {
-      autoIncrement: true,
+    movie_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      comment: "출연진 id"
+      defaultValue: 1,
+      comment: "영화 id",
+      references: {
+        model: 'Movie',
+        key: 'movie_id'
+      }
     },
-    cast_name: {
-      type: DataTypes.STRING(20),
-      allowNull: false
-    },
-    nationality: {
-      type: DataTypes.STRING(20),
-      allowNull: true
-    },
-    job: {
-      type: DataTypes.CHAR(1),
+    country_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: "1",
-      comment: "1: 배우 2: 감독"
+      defaultValue: 1,
+      comment: "국가 id",
+      references: {
+        model: 'Country',
+        key: 'country_id'
+      }
     },
     create_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       comment: "생성일"
-    },
-    cast_birth: {
-      type: DataTypes.DATEONLY,
-      allowNull: true
     },
     update_at: {
       type: DataTypes.DATE,
@@ -51,19 +46,25 @@ class Cast extends Sequelize.Model {
     }
   }, {
     sequelize,
-    tableName: 'Cast',
+    tableName: 'Country_of_movie',
     timestamps: false,
     indexes: [
       {
-        name: "PRIMARY",
-        unique: true,
+        name: "FK_Movie_TO_Country_of_movie_1",
         using: "BTREE",
         fields: [
-          { name: "cast_id" },
+          { name: "movie_id" },
+        ]
+      },
+      {
+        name: "FK_Country_TO_Country_of_movie_1",
+        using: "BTREE",
+        fields: [
+          { name: "country_id" },
         ]
       },
     ]
   });
-  return Cast;
+  return Country_of_movie;
   }
 }

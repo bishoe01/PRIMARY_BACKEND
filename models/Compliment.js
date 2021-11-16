@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Compliment', {
+module.exports = (sequelize, DataTypes) => {
+  return Compliment.init(sequelize, DataTypes);
+}
+
+class Compliment extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     compliment_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -23,11 +29,6 @@ module.exports = function(sequelize, DataTypes) {
       defaultValue: 0,
       comment: "칭찬수"
     },
-    employee_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: "직원id"
-    },
     created_at: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -42,6 +43,14 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.CHAR(1),
       allowNull: false,
       defaultValue: "N"
+    },
+    employee_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: 'Employee',
+        key: 'employee_id'
+      }
     }
   }, {
     sequelize,
@@ -56,6 +65,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "compliment_id" },
         ]
       },
+      {
+        name: "FK_Employee_TO_Compliment_1",
+        using: "BTREE",
+        fields: [
+          { name: "employee_id" },
+        ]
+      },
     ]
   });
-};
+  return Compliment;
+  }
+}

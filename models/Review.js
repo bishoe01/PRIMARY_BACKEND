@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Review', {
+module.exports = (sequelize, DataTypes) => {
+  return Review.init(sequelize, DataTypes);
+}
+
+class Review extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     review_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "리뷰 id"
     },
@@ -46,13 +51,21 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "유저 id"
+      comment: "유저 id",
+      references: {
+        model: 'User',
+        key: 'user_id'
+      }
     },
     movie_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "영화 id"
+      comment: "영화 id",
+      references: {
+        model: 'Movie',
+        key: 'movie_id'
+      }
     }
   }, {
     sequelize,
@@ -67,6 +80,22 @@ module.exports = function(sequelize, DataTypes) {
           { name: "review_id" },
         ]
       },
+      {
+        name: "FK_User_TO_Review_1",
+        using: "BTREE",
+        fields: [
+          { name: "user_id" },
+        ]
+      },
+      {
+        name: "FK_Movie_TO_Review_1",
+        using: "BTREE",
+        fields: [
+          { name: "movie_id" },
+        ]
+      },
     ]
   });
-};
+  return Review;
+  }
+}
