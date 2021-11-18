@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('User', {
+module.exports = (sequelize, DataTypes) => {
+  return User.init(sequelize, DataTypes);
+}
+
+class User extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     user_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "유저 id"
     },
@@ -14,7 +19,7 @@ module.exports = function(sequelize, DataTypes) {
       comment: "이름"
     },
     login_id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.STRING(20),
       allowNull: false,
       comment: "아이디"
     },
@@ -71,7 +76,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "멤버십 id"
+      comment: "멤버십 id",
+      references: {
+        model: 'Membership',
+        key: 'membership_id'
+      }
     }
   }, {
     sequelize,
@@ -86,6 +95,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "user_id" },
         ]
       },
+      {
+        name: "FK_Membership_TO_User_1",
+        using: "BTREE",
+        fields: [
+          { name: "membership_id" },
+        ]
+      },
     ]
   });
-};
+  return User;
+  }
+}

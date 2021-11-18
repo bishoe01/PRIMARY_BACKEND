@@ -1,39 +1,27 @@
 const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  return Theater_items.init(sequelize, DataTypes);
+  return Genre.init(sequelize, DataTypes);
 }
 
-class Theater_items extends Sequelize.Model {
+class Genre extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   super.init({
-    items_id: {
+    genre_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      comment: "특수물품id"
+      primaryKey: true
     },
-    item_type: {
-      type: DataTypes.CHAR(1),
-      allowNull: false,
-      comment: "물건 유형"
+    genre_name: {
+      type: DataTypes.STRING(20),
+      allowNull: false
     },
-    total_quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: "총 개수"
-    },
-    remain_quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: "현재 개수"
-    },
-    created_at: {
+    create_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     },
-    updated_at: {
+    update_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
@@ -45,7 +33,7 @@ class Theater_items extends Sequelize.Model {
     }
   }, {
     sequelize,
-    tableName: 'Theater_items',
+    tableName: 'Genre',
     timestamps: false,
     indexes: [
       {
@@ -53,11 +41,11 @@ class Theater_items extends Sequelize.Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "items_id" },
+          { name: "genre_id" },
         ]
       },
     ]
   });
-  return Theater_items;
+  return Genre;
   }
 }

@@ -1,28 +1,42 @@
 const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  return Hall.init(sequelize, DataTypes);
+  return Genre_of_movie.init(sequelize, DataTypes);
 }
 
-class Hall extends Sequelize.Model {
+class Genre_of_movie extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   super.init({
-    hall_id: {
+    genre_of_movie_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      comment: "상영관 id"
+      primaryKey: true
     },
-    type: {
+    is_deleted: {
       type: DataTypes.CHAR(1),
       allowNull: false,
-      defaultValue: "1",
-      comment: "상영타입 (1: 2D, 2: 3D, 3:IMAX 등)"
+      defaultValue: "N",
+      comment: "삭제여부"
     },
-    seat_num: {
+    movie_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "좌석수"
+      defaultValue: 1,
+      comment: "영화 id",
+      references: {
+        model: 'Movie',
+        key: 'movie_id'
+      }
+    },
+    genre_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
+      comment: "장르 id",
+      references: {
+        model: 'Genre',
+        key: 'genre_id'
+      }
     },
     create_at: {
       type: DataTypes.DATE,
@@ -35,26 +49,10 @@ class Hall extends Sequelize.Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       comment: "수정일"
-    },
-    is_deleted: {
-      type: DataTypes.CHAR(1),
-      allowNull: false,
-      defaultValue: "N",
-      comment: "삭제여부"
-    },
-    theater_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 1,
-      comment: "극장 id",
-      references: {
-        model: 'Theater',
-        key: 'theater_id'
-      }
     }
   }, {
     sequelize,
-    tableName: 'Hall',
+    tableName: 'Genre_of_movie',
     timestamps: false,
     indexes: [
       {
@@ -62,18 +60,25 @@ class Hall extends Sequelize.Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "hall_id" },
+          { name: "genre_of_movie_id" },
         ]
       },
       {
-        name: "FK_Theater_TO_Hall_1",
+        name: "FK_Movie_TO_Genre_of_movie_1",
         using: "BTREE",
         fields: [
-          { name: "theater_id" },
+          { name: "movie_id" },
+        ]
+      },
+      {
+        name: "FK_Genre_TO_Genre_of_movie_1",
+        using: "BTREE",
+        fields: [
+          { name: "genre_id" },
         ]
       },
     ]
   });
-  return Hall;
+  return Genre_of_movie;
   }
 }

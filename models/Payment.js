@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Payment', {
+module.exports = (sequelize, DataTypes) => {
+  return Payment.init(sequelize, DataTypes);
+}
+
+class Payment extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     payment_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -20,11 +26,19 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "예매 id"
+      comment: "예매 id",
+      references: {
+        model: 'Reservation',
+        key: 'reservation_id'
+      }
     },
     parking_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'Parking',
+        key: 'parking_id'
+      }
     },
     user_id: {
       type: DataTypes.STRING(255),
@@ -64,6 +78,22 @@ module.exports = function(sequelize, DataTypes) {
           { name: "payment_id" },
         ]
       },
+      {
+        name: "FK_Reservation_TO_Payment_1",
+        using: "BTREE",
+        fields: [
+          { name: "reservation_id" },
+        ]
+      },
+      {
+        name: "FK_Parking_TO_Payment_1",
+        using: "BTREE",
+        fields: [
+          { name: "parking_id" },
+        ]
+      },
     ]
   });
-};
+  return Payment;
+  }
+}

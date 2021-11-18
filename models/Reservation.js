@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Reservation', {
+module.exports = (sequelize, DataTypes) => {
+  return Reservation.init(sequelize, DataTypes);
+}
+
+class Reservation extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     reservation_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "예매 id"
     },
@@ -35,13 +40,21 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "유저 id"
+      comment: "유저 id",
+      references: {
+        model: 'User',
+        key: 'user_id'
+      }
     },
     movie_schedule_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "상영 스케줄 id"
+      comment: "상영 스케줄 id",
+      references: {
+        model: 'Movie_schedule',
+        key: 'movie_schedule_id'
+      }
     }
   }, {
     sequelize,
@@ -56,6 +69,22 @@ module.exports = function(sequelize, DataTypes) {
           { name: "reservation_id" },
         ]
       },
+      {
+        name: "FK_User_TO_Reservation_1",
+        using: "BTREE",
+        fields: [
+          { name: "user_id" },
+        ]
+      },
+      {
+        name: "FK_Movie_schedule_TO_Reservation_1",
+        using: "BTREE",
+        fields: [
+          { name: "movie_schedule_id" },
+        ]
+      },
     ]
   });
-};
+  return Reservation;
+  }
+}

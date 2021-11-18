@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Suggestion', {
+module.exports = (sequelize, DataTypes) => {
+  return Suggestion.init(sequelize, DataTypes);
+}
+
+class Suggestion extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     suggestion_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -62,4 +68,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return Suggestion;
+  }
+}
