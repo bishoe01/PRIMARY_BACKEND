@@ -1,26 +1,16 @@
 const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  return Cast_of_movie.init(sequelize, DataTypes);
+  return Country_of_movie.init(sequelize, DataTypes);
 }
 
-class Cast_of_movie extends Sequelize.Model {
+class Country_of_movie extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   super.init({
-    cast_of_movie_id: {
+    country_of_movie_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
-    },
-    cast_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 1,
-      comment: "출연진 id",
-      references: {
-        model: 'Cast',
-        key: 'cast_id'
-      }
     },
     movie_id: {
       type: DataTypes.INTEGER,
@@ -32,17 +22,27 @@ class Cast_of_movie extends Sequelize.Model {
         key: 'movie_id'
       }
     },
-    is_deleted: {
-      type: DataTypes.CHAR(1),
+    country_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: "N",
-      comment: "삭제여부"
+      defaultValue: 1,
+      comment: "국가 id",
+      references: {
+        model: 'Country',
+        key: 'country_id'
+      }
     },
     update_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       comment: "수정일"
+    },
+    is_deleted: {
+      type: DataTypes.CHAR(1),
+      allowNull: false,
+      defaultValue: "N",
+      comment: "삭제여부"
     },
     create_at: {
       type: DataTypes.DATE,
@@ -52,7 +52,7 @@ class Cast_of_movie extends Sequelize.Model {
     }
   }, {
     sequelize,
-    tableName: 'Cast_of_movie',
+    tableName: 'Country_of_movie',
     timestamps: false,
     indexes: [
       {
@@ -60,25 +60,25 @@ class Cast_of_movie extends Sequelize.Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "cast_of_movie_id" },
+          { name: "country_of_movie_id" },
         ]
       },
       {
-        name: "FK_Movie_TO_Cast_of_movie_1",
+        name: "FK_Movie_TO_Country_of_movie_1",
         using: "BTREE",
         fields: [
           { name: "movie_id" },
         ]
       },
       {
-        name: "FK_Cast_TO_Cast_of_movie_1",
+        name: "FK_Country_TO_Country_of_movie_1",
         using: "BTREE",
         fields: [
-          { name: "cast_id" },
+          { name: "country_id" },
         ]
       },
     ]
   });
-  return Cast_of_movie;
+  return Country_of_movie;
   }
 }

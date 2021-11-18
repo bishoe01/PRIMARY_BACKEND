@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Attendant', {
+module.exports = (sequelize, DataTypes) => {
+  return Attendant.init(sequelize, DataTypes);
+}
+
+class Attendant extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     attendant_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -22,7 +28,11 @@ module.exports = function(sequelize, DataTypes) {
     employee_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "직원id"
+      comment: "직원Id",
+      references: {
+        model: 'Employee',
+        key: 'employee_id'
+      }
     }
   }, {
     sequelize,
@@ -37,6 +47,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "attendant_id" },
         ]
       },
+      {
+        name: "FK_Employee_TO_Attendant_1",
+        using: "BTREE",
+        fields: [
+          { name: "employee_id" },
+        ]
+      },
     ]
   });
-};
+  return Attendant;
+  }
+}

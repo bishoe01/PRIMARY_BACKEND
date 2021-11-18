@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Like_movie', {
+module.exports = (sequelize, DataTypes) => {
+  return Like_movie.init(sequelize, DataTypes);
+}
+
+class Like_movie extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     like_movie_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "좋아요 누른 영화 id"
     },
@@ -12,13 +17,21 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "유저 id"
+      comment: "유저 id",
+      references: {
+        model: 'User',
+        key: 'user_id'
+      }
     },
     movie_id2: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "영화 id"
+      comment: "영화 id",
+      references: {
+        model: 'Movie',
+        key: 'movie_id'
+      }
     },
     create_at: {
       type: DataTypes.DATE,
@@ -51,6 +64,22 @@ module.exports = function(sequelize, DataTypes) {
           { name: "like_movie_id" },
         ]
       },
+      {
+        name: "FK_User_TO_Like_movie_1",
+        using: "BTREE",
+        fields: [
+          { name: "user_id" },
+        ]
+      },
+      {
+        name: "FK_Movie_TO_Like_movie_1",
+        using: "BTREE",
+        fields: [
+          { name: "movie_id2" },
+        ]
+      },
     ]
   });
-};
+  return Like_movie;
+  }
+}

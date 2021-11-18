@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Schedule', {
+module.exports = (sequelize, DataTypes) => {
+  return Schedule.init(sequelize, DataTypes);
+}
+
+class Schedule extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     schedule_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -50,7 +56,11 @@ module.exports = function(sequelize, DataTypes) {
     employee_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "대상 직원"
+      comment: "대상 직원",
+      references: {
+        model: 'Employee',
+        key: 'employee_id'
+      }
     },
     totalwork_time: {
       type: DataTypes.INTEGER,
@@ -85,6 +95,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "schedule_id" },
         ]
       },
+      {
+        name: "FK_Employee_TO_Schedule_1",
+        using: "BTREE",
+        fields: [
+          { name: "employee_id" },
+        ]
+      },
     ]
   });
-};
+  return Schedule;
+  }
+}

@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Hall', {
+module.exports = (sequelize, DataTypes) => {
+  return Hall.init(sequelize, DataTypes);
+}
+
+class Hall extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     hall_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "상영관 id"
     },
@@ -41,7 +46,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "극장 id"
+      comment: "극장 id",
+      references: {
+        model: 'Theater',
+        key: 'theater_id'
+      }
     }
   }, {
     sequelize,
@@ -56,6 +65,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "hall_id" },
         ]
       },
+      {
+        name: "FK_Theater_TO_Hall_1",
+        using: "BTREE",
+        fields: [
+          { name: "theater_id" },
+        ]
+      },
     ]
   });
-};
+  return Hall;
+  }
+}

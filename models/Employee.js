@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Employee', {
+module.exports = (sequelize, DataTypes) => {
+  return Employee.init(sequelize, DataTypes);
+}
+
+class Employee extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     employee_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -50,7 +56,10 @@ module.exports = function(sequelize, DataTypes) {
     department_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "부서id"
+      references: {
+        model: 'Department',
+        key: 'department_id'
+      }
     },
     created_at: {
       type: DataTypes.DATE,
@@ -80,6 +89,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "employee_id" },
         ]
       },
+      {
+        name: "FK_Department_TO_Employee_1",
+        using: "BTREE",
+        fields: [
+          { name: "department_id" },
+        ]
+      },
     ]
   });
-};
+  return Employee;
+  }
+}

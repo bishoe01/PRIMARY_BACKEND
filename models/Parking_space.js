@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Parking_space', {
+module.exports = (sequelize, DataTypes) => {
+  return Parking_space.init(sequelize, DataTypes);
+}
+
+class Parking_space extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     parking_space_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -20,11 +26,19 @@ module.exports = function(sequelize, DataTypes) {
     },
     parking_lot_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'Parking_lot',
+        key: 'parking_lot_id'
+      }
     },
     department_id: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      references: {
+        model: 'Department',
+        key: 'department_id'
+      }
     },
     created_at: {
       type: DataTypes.DATE,
@@ -51,6 +65,22 @@ module.exports = function(sequelize, DataTypes) {
           { name: "parking_space_id" },
         ]
       },
+      {
+        name: "FK_Parking_lot_TO_Parking_space_1",
+        using: "BTREE",
+        fields: [
+          { name: "parking_lot_id" },
+        ]
+      },
+      {
+        name: "FK_Department_TO_Parking_space_1",
+        using: "BTREE",
+        fields: [
+          { name: "department_id" },
+        ]
+      },
     ]
   });
-};
+  return Parking_space;
+  }
+}

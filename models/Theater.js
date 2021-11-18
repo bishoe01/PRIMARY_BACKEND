@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Theater', {
+module.exports = (sequelize, DataTypes) => {
+  return Theater.init(sequelize, DataTypes);
+}
+
+class Theater extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     theater_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "극장 id"
     },
@@ -28,11 +33,10 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       comment: "소개"
     },
-    create_at: {
-      type: DataTypes.DATE,
+    theater_image: {
+      type: DataTypes.TEXT,
       allowNull: false,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
-      comment: "생성일"
+      comment: "극장 이미지"
     },
     update_at: {
       type: DataTypes.DATE,
@@ -45,6 +49,12 @@ module.exports = function(sequelize, DataTypes) {
       allowNull: false,
       defaultValue: "N",
       comment: "삭제여부"
+    },
+    create_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      comment: "생성일"
     }
   }, {
     sequelize,
@@ -61,4 +71,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return Theater;
+  }
+}

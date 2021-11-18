@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Product_type', {
+module.exports = (sequelize, DataTypes) => {
+  return Product_type.init(sequelize, DataTypes);
+}
+
+class Product_type extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     product_type_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "종류 id"
     },
@@ -47,4 +52,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return Product_type;
+  }
+}

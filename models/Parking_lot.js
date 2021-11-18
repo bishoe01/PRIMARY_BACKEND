@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Parking_lot', {
+module.exports = (sequelize, DataTypes) => {
+  return Parking_lot.init(sequelize, DataTypes);
+}
+
+class Parking_lot extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     parking_lot_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
@@ -15,7 +21,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "극장 id"
+      comment: "극장 id",
+      references: {
+        model: 'Theater',
+        key: 'theater_id'
+      }
     },
     created_at: {
       type: DataTypes.DATE,
@@ -45,6 +55,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "parking_lot_id" },
         ]
       },
+      {
+        name: "FK_Theater_TO_Parking_lot_1",
+        using: "BTREE",
+        fields: [
+          { name: "theater_id" },
+        ]
+      },
     ]
   });
-};
+  return Parking_lot;
+  }
+}

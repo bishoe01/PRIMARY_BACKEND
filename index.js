@@ -1,21 +1,20 @@
 const express = require("express");
-const sequelize = require("./models").sequelize;
-const attendant = require("./models").Attendant;
+const attendant = require("./routes/attendant");
+const schedule = require("./routes/schedule");
+const Sequelize = require("sequelize");
 
 const PORT = "3000";
 
 const app = express();
 app.use(express.json());
 
-sequelize.authenticate();
+app.use("/attendant", attendant);
+app.use("/schedule", schedule);
 
-app.get("/", (req, res) => {
-  res.send("hello primary");
-});
-
-app.get("/test", async (req, res) => {
-  const at = await attendant.findAll();
-  res.send(at);
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  console.log(err instanceof Sequelize.BaseError);
+  res.status(500).json({ err: err, stack: err.stack });
 });
 
 app.listen(PORT, () => {

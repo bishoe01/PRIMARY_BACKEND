@@ -1,26 +1,22 @@
 const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  return Cast_of_movie.init(sequelize, DataTypes);
+  return Genre_of_movie.init(sequelize, DataTypes);
 }
 
-class Cast_of_movie extends Sequelize.Model {
+class Genre_of_movie extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   super.init({
-    cast_of_movie_id: {
+    genre_of_movie_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    cast_id: {
-      type: DataTypes.INTEGER,
+    is_deleted: {
+      type: DataTypes.CHAR(1),
       allowNull: false,
-      defaultValue: 1,
-      comment: "출연진 id",
-      references: {
-        model: 'Cast',
-        key: 'cast_id'
-      }
+      defaultValue: "N",
+      comment: "삭제여부"
     },
     movie_id: {
       type: DataTypes.INTEGER,
@@ -32,27 +28,31 @@ class Cast_of_movie extends Sequelize.Model {
         key: 'movie_id'
       }
     },
-    is_deleted: {
-      type: DataTypes.CHAR(1),
+    genre_id: {
+      type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: "N",
-      comment: "삭제여부"
-    },
-    update_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
-      comment: "수정일"
+      defaultValue: 1,
+      comment: "장르 id",
+      references: {
+        model: 'Genre',
+        key: 'genre_id'
+      }
     },
     create_at: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       comment: "생성일"
+    },
+    update_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      comment: "수정일"
     }
   }, {
     sequelize,
-    tableName: 'Cast_of_movie',
+    tableName: 'Genre_of_movie',
     timestamps: false,
     indexes: [
       {
@@ -60,25 +60,25 @@ class Cast_of_movie extends Sequelize.Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "cast_of_movie_id" },
+          { name: "genre_of_movie_id" },
         ]
       },
       {
-        name: "FK_Movie_TO_Cast_of_movie_1",
+        name: "FK_Movie_TO_Genre_of_movie_1",
         using: "BTREE",
         fields: [
           { name: "movie_id" },
         ]
       },
       {
-        name: "FK_Cast_TO_Cast_of_movie_1",
+        name: "FK_Genre_TO_Genre_of_movie_1",
         using: "BTREE",
         fields: [
-          { name: "cast_id" },
+          { name: "genre_id" },
         ]
       },
     ]
   });
-  return Cast_of_movie;
+  return Genre_of_movie;
   }
 }

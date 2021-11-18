@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Product', {
+module.exports = (sequelize, DataTypes) => {
+  return Product.init(sequelize, DataTypes);
+}
+
+class Product extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     product_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "상품 번호"
     },
@@ -27,7 +32,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "종류 id"
+      comment: "종류 id",
+      references: {
+        model: 'Product_type',
+        key: 'product_type_id'
+      }
     },
     created_at: {
       type: DataTypes.DATE,
@@ -56,6 +65,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "product_id" },
         ]
       },
+      {
+        name: "FK_Product_type_TO_Product_1",
+        using: "BTREE",
+        fields: [
+          { name: "product_type_id" },
+        ]
+      },
     ]
   });
-};
+  return Product;
+  }
+}

@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Employee_notice', {
+module.exports = (sequelize, DataTypes) => {
+  return Employee_notice.init(sequelize, DataTypes);
+}
+
+class Employee_notice extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     employee_notice_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -52,4 +58,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return Employee_notice;
+  }
+}

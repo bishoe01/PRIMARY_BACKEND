@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Order', {
+module.exports = (sequelize, DataTypes) => {
+  return Order.init(sequelize, DataTypes);
+}
+
+class Order extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     order_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "주문 id"
     },
@@ -17,7 +22,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "유저 id"
+      comment: "유저 id",
+      references: {
+        model: 'User',
+        key: 'user_id'
+      }
     },
     created_at: {
       type: DataTypes.DATE,
@@ -47,6 +56,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "order_id" },
         ]
       },
+      {
+        name: "FK_User_TO_Order_1",
+        using: "BTREE",
+        fields: [
+          { name: "user_id" },
+        ]
+      },
     ]
   });
-};
+  return Order;
+  }
+}

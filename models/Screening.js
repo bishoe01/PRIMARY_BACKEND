@@ -1,7 +1,13 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Screening', {
+module.exports = (sequelize, DataTypes) => {
+  return Screening.init(sequelize, DataTypes);
+}
+
+class Screening extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     screening_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
@@ -52,4 +58,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return Screening;
+  }
+}
