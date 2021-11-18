@@ -1,28 +1,22 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Event', {
+module.exports = (sequelize, DataTypes) => {
+  return Event.init(sequelize, DataTypes);
+}
+
+class Event extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     event_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "이벤트 id"
     },
-    employee_id: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      primaryKey: true,
-      comment: "등록자"
-    },
     event_name: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      comment: "이름"
-    },
-    creation_date: {
       type: DataTypes.STRING(20),
       allowNull: false,
-      comment: "등록 날짜"
+      comment: "이름"
     },
     start_date: {
       type: DataTypes.CHAR(1),
@@ -76,9 +70,10 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "event_id" },
-          { name: "employee_id" },
         ]
       },
     ]
   });
-};
+  return Event;
+  }
+}

@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Refund', {
+module.exports = (sequelize, DataTypes) => {
+  return Refund.init(sequelize, DataTypes);
+}
+
+class Refund extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     refund_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "환불 id"
     },
@@ -27,7 +32,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "주문상세 id"
+      comment: "주문상세 id",
+      references: {
+        model: 'Order_detail',
+        key: 'order_detail'
+      }
     },
     created_at: {
       type: DataTypes.DATE,
@@ -57,6 +66,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "refund_id" },
         ]
       },
+      {
+        name: "FK_Order_detail_TO_Refund_1",
+        using: "BTREE",
+        fields: [
+          { name: "order_detail" },
+        ]
+      },
     ]
   });
-};
+  return Refund;
+  }
+}

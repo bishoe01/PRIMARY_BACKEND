@@ -1,6 +1,11 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Booked_seat', {
+module.exports = (sequelize, DataTypes) => {
+  return Booked_seat.init(sequelize, DataTypes);
+}
+
+class Booked_seat extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     create_at: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -23,17 +28,43 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "좌석 id"
+      comment: "좌석 id",
+      references: {
+        model: 'Seat',
+        key: 'seat_id'
+      }
     },
     reservation_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "예매 id"
+      comment: "예매 id",
+      references: {
+        model: 'Reservation',
+        key: 'reservation_id'
+      }
     }
   }, {
     sequelize,
     tableName: 'Booked_seat',
-    timestamps: false
+    timestamps: false,
+    indexes: [
+      {
+        name: "FK_Seat_TO_Booked_seat_1",
+        using: "BTREE",
+        fields: [
+          { name: "seat_id" },
+        ]
+      },
+      {
+        name: "FK_Reservation_TO_Booked_seat_1",
+        using: "BTREE",
+        fields: [
+          { name: "reservation_id" },
+        ]
+      },
+    ]
   });
-};
+  return Booked_seat;
+  }
+}

@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Movie_schedule', {
+module.exports = (sequelize, DataTypes) => {
+  return Movie_schedule.init(sequelize, DataTypes);
+}
+
+class Movie_schedule extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     movie_schedule_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "상영 스케줄 id"
     },
@@ -40,13 +45,21 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "영화 id"
+      comment: "영화 id",
+      references: {
+        model: 'Movie',
+        key: 'movie_id'
+      }
     },
     hall_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "상영관 id"
+      comment: "상영관 id",
+      references: {
+        model: 'Hall',
+        key: 'hall_id'
+      }
     }
   }, {
     sequelize,
@@ -61,6 +74,22 @@ module.exports = function(sequelize, DataTypes) {
           { name: "movie_schedule_id" },
         ]
       },
+      {
+        name: "FK_Movie_TO_Movie_schedule_1",
+        using: "BTREE",
+        fields: [
+          { name: "movie_id" },
+        ]
+      },
+      {
+        name: "FK_Hall_TO_Movie_schedule_1",
+        using: "BTREE",
+        fields: [
+          { name: "hall_id" },
+        ]
+      },
     ]
   });
-};
+  return Movie_schedule;
+  }
+}

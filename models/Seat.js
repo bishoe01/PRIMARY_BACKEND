@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Seat', {
+module.exports = (sequelize, DataTypes) => {
+  return Seat.init(sequelize, DataTypes);
+}
+
+class Seat extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     seat_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "좌석 id"
     },
@@ -54,7 +59,11 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
-      comment: "상영관 id"
+      comment: "상영관 id",
+      references: {
+        model: 'Hall',
+        key: 'hall_id'
+      }
     }
   }, {
     sequelize,
@@ -69,6 +78,15 @@ module.exports = function(sequelize, DataTypes) {
           { name: "seat_id" },
         ]
       },
+      {
+        name: "FK_Hall_TO_Seat_1",
+        using: "BTREE",
+        fields: [
+          { name: "hall_id" },
+        ]
+      },
     ]
   });
-};
+  return Seat;
+  }
+}

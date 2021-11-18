@@ -1,10 +1,15 @@
 const Sequelize = require('sequelize');
-module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('Membership', {
+module.exports = (sequelize, DataTypes) => {
+  return Membership.init(sequelize, DataTypes);
+}
+
+class Membership extends Sequelize.Model {
+  static init(sequelize, DataTypes) {
+  super.init({
     membership_id: {
+      autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      defaultValue: 1,
       primaryKey: true,
       comment: "멤버십 id"
     },
@@ -51,4 +56,6 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
-};
+  return Membership;
+  }
+}
