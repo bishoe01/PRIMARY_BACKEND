@@ -8,6 +8,7 @@ module.exports = {
     host: "primarykey.cqok5mvhto8h.ap-northeast-2.rds.amazonaws.com",
     port: 3306,
     dialect: "mysql",
+    "operatiorAliases":false
   },
   test: {
     username: "root",
