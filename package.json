@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/bishoe01/PRIMARY_BACKEND#readme",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-attributes": "^1.0.7",
