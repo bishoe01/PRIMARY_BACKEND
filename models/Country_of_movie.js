@@ -6,6 +6,12 @@ module.exports = (sequelize, DataTypes) => {
 class Country_of_movie extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   super.init({
+    country_of_movie_id: {
+      autoIncrement: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      primaryKey: true
+    },
     movie_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -26,12 +32,6 @@ class Country_of_movie extends Sequelize.Model {
         key: 'country_id'
       }
     },
-    create_at: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
-      comment: "생성일"
-    },
     update_at: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -43,12 +43,26 @@ class Country_of_movie extends Sequelize.Model {
       allowNull: false,
       defaultValue: "N",
       comment: "삭제여부"
+    },
+    create_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      comment: "생성일"
     }
   }, {
     sequelize,
     tableName: 'Country_of_movie',
     timestamps: false,
     indexes: [
+      {
+        name: "PRIMARY",
+        unique: true,
+        using: "BTREE",
+        fields: [
+          { name: "country_of_movie_id" },
+        ]
+      },
       {
         name: "FK_Movie_TO_Country_of_movie_1",
         using: "BTREE",

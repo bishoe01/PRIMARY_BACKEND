@@ -28,6 +28,12 @@ const PORT = "3000";
   const movie = require('./routes/user/movie');
   app.use("/movies", movie);
 
+  const cast  = require('./routes/user/cast');
+  app.use("/cast", cast);
+
+  const theater  = require('./routes/user/theater');
+  app.use("/theater", theater);
+
   app.listen(PORT, () => {
     console.log(`listening at ${PORT}`);
   });
