@@ -1,22 +1,19 @@
 const express = require("express");
-const sequelize = require("./models").sequelize;
-const attendant = require("./models").Attendant;
-const ServiceManagerRouter = require('./routes/ServiceManager');
-const SuggestManager = require('./routes/SuggestManager');
-const MenuviewsRouter = require('./routes/Menuview');
-const CheckManagerRouter = require('./routes/CheckManager');
-const ScheduleRouter = require('./routes/ScheduleManager');
+const attendant = require("./routes/attendant");
+const schedule = require("./routes/schedule");
+const Sequelize = require("sequelize");
+
 const PORT = "3000";
 const app = express();
-sequelize.authenticate();
 app.use(express.json());
-app.get("/", (req, res) => {
-  res.send("hello primary");
-});
 
-app.get("/test", async (req, res) => {
-  const at = await attendant.findAll();
-  res.send(at);
+app.use("/attendant", attendant);
+app.use("/schedule", schedule);
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  console.log(err instanceof Sequelize.BaseError);
+  res.status(500).json({ err: err, stack: err.stack });
 });
 
 app.use('/service', ServiceManagerRouter);
