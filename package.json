@@ -21,8 +21,12 @@
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-attributes": "^1.0.7",
+    "jsonwebtoken": "^8.5.1",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.2",
+    "passport": "^0.5.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "sequelize": "^6.9.0",
     "sequelize-auto": "^0.8.5"
   }
