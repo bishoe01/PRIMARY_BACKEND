@@ -33,11 +33,10 @@ class Theater extends Sequelize.Model {
       allowNull: false,
       comment: "소개"
     },
-    create_at: {
-      type: DataTypes.DATE,
+    theater_image: {
+      type: DataTypes.TEXT,
       allowNull: false,
-      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
-      comment: "생성일"
+      comment: "극장 이미지"
     },
     update_at: {
       type: DataTypes.DATE,
@@ -50,6 +49,12 @@ class Theater extends Sequelize.Model {
       allowNull: false,
       defaultValue: "N",
       comment: "삭제여부"
+    },
+    create_at: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
+      comment: "생성일"
     }
   }, {
     sequelize,

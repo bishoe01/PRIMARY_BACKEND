@@ -13,16 +13,15 @@ class Hall extends Sequelize.Model {
       primaryKey: true,
       comment: "상영관 id"
     },
-    type: {
-      type: DataTypes.CHAR(1),
-      allowNull: false,
-      defaultValue: "1",
-      comment: "상영타입 (1: 2D, 2: 3D, 3:IMAX 등)"
+    hall_name: {
+      type: DataTypes.CHAR(10),
+      allowNull: false
     },
-    seat_num: {
+    type: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      comment: "좌석수"
+      defaultValue: 1,
+      comment: "상영타입 (1: 2D, 2: 3D, 3:IMAX 등)"
     },
     create_at: {
       type: DataTypes.DATE,
@@ -51,6 +50,11 @@ class Hall extends Sequelize.Model {
         model: 'Theater',
         key: 'theater_id'
       }
+    },
+    seat_num: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      comment: "좌석수"
     }
   }, {
     sequelize,

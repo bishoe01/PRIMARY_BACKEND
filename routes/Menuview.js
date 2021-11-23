@@ -29,6 +29,19 @@ router.get('/list',async(req,res,next)=>{
     }
 });
 
+router.get('/:menuID',async(req,res,next)=>{
+    const {menuID} = req.params;
+    try{
+        const menus = await Menu.findAll({
+            where : {menu_id: menuID}
+        });
+        res.send({menus});
+    }catch(error){
+        console.log.error(error);
+        next(error);
+    }
+});
+
 router.post('/', function(req,res){
     const {menu_type,menu_details, menu_list, menu_image,created_at,updated_at,is_deleted} = req.body;
     Menu.create({

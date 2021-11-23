@@ -124,6 +124,8 @@ function initModels(sequelize) {
   Employee.hasMany(Schedule, { as: "Schedules", foreignKey: "employee_id"});
   Status_now.belongsTo(Employee, { as: "employee", foreignKey: "employee_id"});
   Employee.hasMany(Status_now, { as: "Status_nows", foreignKey: "employee_id"});
+  Suggestion.belongsTo(Employee, { as: "employee", foreignKey: "employee_id"});
+  Employee.hasMany(Suggestion, { as: "Suggestions", foreignKey: "employee_id"});
   Screen_management.belongsTo(Facility, { as: "facility", foreignKey: "facility_id"});
   Facility.hasMany(Screen_management, { as: "Screen_managements", foreignKey: "facility_id"});
   Genre_of_movie.belongsTo(Genre, { as: "genre", foreignKey: "genre_id"});
@@ -140,8 +142,8 @@ function initModels(sequelize) {
   Movie.hasMany(Country_of_movie, { as: "Country_of_movies", foreignKey: "movie_id"});
   Genre_of_movie.belongsTo(Movie, { as: "movie", foreignKey: "movie_id"});
   Movie.hasMany(Genre_of_movie, { as: "Genre_of_movies", foreignKey: "movie_id"});
-  Like_movie.belongsTo(Movie, { as: "movie_id2_Movie", foreignKey: "movie_id2"});
-  Movie.hasMany(Like_movie, { as: "Like_movies", foreignKey: "movie_id2"});
+  Like_movie.belongsTo(Movie, { as: "movie", foreignKey: "movie_id"});
+  Movie.hasMany(Like_movie, { as: "Like_movies", foreignKey: "movie_id"});
   Movie_schedule.belongsTo(Movie, { as: "movie", foreignKey: "movie_id"});
   Movie.hasMany(Movie_schedule, { as: "Movie_schedules", foreignKey: "movie_id"});
   Review.belongsTo(Movie, { as: "movie", foreignKey: "movie_id"});

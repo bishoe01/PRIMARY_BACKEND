@@ -30,7 +30,7 @@ class User extends Sequelize.Model {
     },
     nickname: {
       type: DataTypes.STRING(20),
-      allowNull: false,
+      allowNull: true,
       comment: "닉네임"
     },
     phone_number: {

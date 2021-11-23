@@ -12,6 +12,7 @@ router.get('/:employeeID/now',async(req,res,next)=>{
     const {employeeID} = req.params;
     try{
         const statuslist = await Status.findAll({
+            attributes : ["employee_id","status", "start_date","end_date"],
             where:{employee_id:employeeID}
         });
         res.send({statuslist});
@@ -41,6 +42,7 @@ router.get('/:employeeID/leave',async(req,res,next)=>{
     const {employeeID}  = req.params;
     try{
         const leaves = await left.findAll({
+            attributes : ["employee_id","leave_id", "start_date","end_date","leave_type","reason","is_approved"],
             where : {employee_id : employeeID}
         });
         res.send({leaves});
@@ -71,6 +73,7 @@ router.post('/leave', function(req,res){
 router.get('/holiday',async(req,res,next)=>{
     try{
         const holidays = await Holiday.findAll({
+            attributes : ["description", "start_date","end_date"],
             where : {holiday_id : 1}
         });
         res.send({holidays});
