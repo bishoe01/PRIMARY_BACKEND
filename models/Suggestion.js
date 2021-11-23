@@ -52,6 +52,18 @@ class Suggestion extends Sequelize.Model {
       type: DataTypes.CHAR(1),
       allowNull: false,
       defaultValue: "N"
+    },
+    employee_id: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'Employee',
+        key: 'employee_id'
+      }
+    },
+    is_approved: {
+      type: DataTypes.CHAR(1),
+      allowNull: true
     }
   }, {
     sequelize,
@@ -64,6 +76,13 @@ class Suggestion extends Sequelize.Model {
         using: "BTREE",
         fields: [
           { name: "suggestion_id" },
+        ]
+      },
+      {
+        name: "FK_Employee_TO_Suggestion_1",
+        using: "BTREE",
+        fields: [
+          { name: "employee_id" },
         ]
       },
     ]

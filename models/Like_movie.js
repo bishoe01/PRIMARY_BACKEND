@@ -23,7 +23,7 @@ class Like_movie extends Sequelize.Model {
         key: 'user_id'
       }
     },
-    movie_id2: {
+    movie_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
       defaultValue: 1,
@@ -75,7 +75,7 @@ class Like_movie extends Sequelize.Model {
         name: "FK_Movie_TO_Like_movie_1",
         using: "BTREE",
         fields: [
-          { name: "movie_id2" },
+          { name: "movie_id" },
         ]
       },
     ]

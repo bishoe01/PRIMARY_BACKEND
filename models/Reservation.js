@@ -14,7 +14,7 @@ class Reservation extends Sequelize.Model {
       comment: "예매 id"
     },
     parking_barcode: {
-      type: DataTypes.STRING(14),
+      type: DataTypes.TEXT,
       allowNull: false,
       comment: "주차권 바코드"
     },

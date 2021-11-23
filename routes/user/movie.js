@@ -12,9 +12,6 @@ const countryOfMovieModel = models.Country_of_movie;
 // api 6번. 영화 장르별 리스트 조회
 router.get("/", async (req,res) => {
     const {status, genreID, countryID, rating} = req.query;
-    // const {genreID} = req.query;
-    // const {countryID} = req.query;
-    // const {rating} = req.query;
 
 
     if (status) {
@@ -227,6 +224,5 @@ router.get("/:movieID", async (req,res) => {
     return res.json ({movieInfo});
 
 })
-
 
 module.exports = router;
