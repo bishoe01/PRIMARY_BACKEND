@@ -40,48 +40,118 @@ router.post("/join", async (req,res) => {
 
 
 
-// api 3번. 특정 유저 프로필 조회
+// // api 3번. 특정 유저 프로필 조회 - 시퀄라이
+// router.get("/:userID", async (req,res) => {
+// const {userID} = req.params;
+//
+// const userInfo = await userModel.findAll({
+//     attributes : ["name", "login_id", "nickname", "phone_number", "email", "birth", "point"],
+//     include : [
+//         {
+//         model : models.Membership ,
+//         as : "membership",
+//         attributes : ["membership_name"]
+//         }
+//     ],
+//     where: {user_id: userID},
+//     });
+//
+// return res.json ({userInfo});
+//
+// })
+
+
+// api 3번. 특정 유저 프로필 조회  - raw query 사용
 router.get("/:userID", async (req,res) => {
-const {userID} = req.params;
+    const {userID} = req.params;
 
-const userInfo = await userModel.findAll({
-    attributes : ["name", "login_id", "nickname", "phone_number", "email", "birth", "point"],
-    include : [
+    const userQuery = `select concat(name,'님') as name ,login_id,nickname,phone_number,User.email,DATE_FORMAT(User.birth, '%Y-%m-%d') as birth,point,membership_name from User
+    inner join Membership M on User.membership_id = M.membership_id
+
+    where user_id = :user_id and User.is_deleted = 'N';`
+
+
+    let userInfo = await sequelize.query(
+        userQuery,
         {
-        model : models.Membership ,
-        as : "membership",
-        attributes : ["membership_name"]
-        }
-    ],
-    where: {user_id: userID},
-    });
+            replacements: {user_id : userID},
+            type: Sequelize.QueryTypes.SELECT,
+            raw: true
+        });
 
-return res.json ({userInfo});
+    return res.json ({userInfo});
+
+})
+
+// api 4번. 특정 유저 예매 내역 리스트 조회 API
+router.get("/:userID/reservations", async (req,res) => {
+    const {userID} = req.params;
+
+    const userReservationListQuery = `select title, date_format(start_time,'%Y.%m.%d %H:%i') as start_time,date_format(end_time,'%Y.%m.%d %H:%i')as end_time,theater_name,hall_name,date(Reservation.create_at) as reservedDate, concat(count(seat_id),'명 관람') as numberOfSeats, parking_barcode from Reservation
+        inner join Movie_schedule Ms on Reservation.movie_schedule_id = Ms.movie_schedule_id
+                                          inner join Movie M on Ms.movie_id = M.movie_id
+                                          inner join Booked_seat Bs on Reservation.reservation_id = Bs.reservation_id
+                                          inner join Hall H on Ms.hall_id = H.hall_id
+                                          inner join Theater T on H.theater_id = T.theater_id
+                                      where user_id = :user_id
+                                      group by start_time;`
+
+
+    let userReservationList = await sequelize.query(
+        userReservationListQuery,
+        {
+            replacements: {user_id : userID},
+            type: Sequelize.QueryTypes.SELECT,
+            raw: true
+        });
+
+    return res.json ({userReservationList});
 
 })
 
 
-// // api 3번. 특정 유저 프로필 조회  - raw query 사용
-// router.get("/:userID", async (req,res) => {
-//     const {userID} = req.params;
-//
-//     const userQuery = `SELECT * FROM User`
-//
-//
-//     let user = await sequelize.query(
-//         userQuery,
-//         {
-//             //replacements: {personId: person.id},
-//             type: Sequelize.QueryTypes.SELECT,
-//             raw: true
-//         });
-//
-//     console.log(user);
-//     return res.json ({user});
-//
-// })
-//
+// api 16번. 좋아요 누른 영화 조회 API
+router.get("/:userID/likemovie", async (req,res) => {
+    const {userID} = req.params;
+
+    const userLikeMovieListQuery = `select title, poster_image from Movie
+                                                                        inner join Like_movie Lm on Movie.movie_id = Lm.movie_id
+                                                                        inner join User U on Lm.user_id = U.user_id
+                                    where U.user_id = :user_id;`
 
 
+    let userLikeMovieList = await sequelize.query(
+        userLikeMovieListQuery,
+        {
+            replacements: {user_id : userID},
+            type: Sequelize.QueryTypes.SELECT,
+            raw: true
+        });
+
+    return res.json ({userLikeMovieList});
+
+})
+
+// api 18번. 작성한 리뷰 목록 조회 API
+router.get("/:userID/reviews", async (req,res) => {
+    const {userID} = req.params;
+
+    const reviewListOfUserQuery = `select reveiw_title, text,Date(Review.create_at)as date, login_id from Review
+        inner join User U on Review.user_id = U.user_id
+                                       inner join Movie M on Review.movie_id = M.movie_id
+                                   where Review.user_id = :user_id;`
+
+
+    let reviewListOfUse = await sequelize.query(
+        reviewListOfUserQuery,
+        {
+            replacements: {user_id : userID},
+            type: Sequelize.QueryTypes.SELECT,
+            raw: true
+        });
+
+    return res.json ({reviewListOfUse});
+
+})
 
 module.exports = router;
