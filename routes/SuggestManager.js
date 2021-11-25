@@ -27,6 +27,22 @@ router.get('/:suggestionID',async(req,res,next)=>{
     }
 });
 
+router.patch('/:suggestionID',async(req,res,next)=>{
+    const {suggestionID} = req.params;
+    const {result} = req.body;
+    const {is_approved} = req.body;
+    try{
+        await Employee_Suggestion.update({
+            result, is_approved
+        },{where : {suggestion_id : suggestionID}});
+        const updateresult =  await Employee_Suggestion.findByPk(suggestionID);
+        res.json(updateresult);
+    }catch(error){
+        console.log.error(error);
+        next(error);
+    }
+});
+
 
 router.post('/', function(req,res){
     const {title,content,result} = req.body;
