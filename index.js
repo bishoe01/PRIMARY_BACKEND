@@ -5,12 +5,11 @@ const cors = require("cors");
 const attendant = require("./routes/attendant");
 const schedule = require("./routes/schedule");
 
-const user = require('./routes/user/user');
-const movie = require('./routes/user/movie');
-const cast  = require('./routes/user/cast');
-const theater  = require('./routes/user/theater');
-const movieSchedule  = require('./routes/user/movieSchedule');
-const seat  = require('./routes/user/seat');
+const user = require("./routes/user/user");
+const movie = require("./routes/user/movie");
+const cast = require("./routes/user/cast");
+const theater = require("./routes/user/theater");
+const reserveManager = require("./routes/user/reserveManager");
 
 const ServiceManagerRouter = require("./routes/ServiceManager");
 const SuggestManager = require("./routes/SuggestManager");
@@ -27,8 +26,7 @@ app.use("/users", user);
 app.use("/movies", movie);
 app.use("/cast", cast);
 app.use("/theater", theater);
-app.use("/movieSchedule", movieSchedule);
-app.use("/seats", seat);
+app.use("/reserve", reserveManager);
 
 app.use("/attendant", attendant);
 app.use("/schedule", schedule);
@@ -48,3 +46,4 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`listening at ${PORT}`);
 });
+
