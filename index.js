@@ -1,16 +1,20 @@
 const express = require("express");
 const passport = require("passport");
 const passportConfig = require("./config/passport");
+const cors = require("cors");
 
 const attendant = require("./routes/attendant");
 const schedule = require("./routes/schedule");
 const auth = require("./routes/auth");
 const payment = require("./routes/payment");
 
-const user = require("./routes/user/user");
-const movie = require("./routes/user/movie");
-const cast = require("./routes/user/cast");
-const theater = require("./routes/user/theater");
+const user = require('./routes/user/user');
+const movie = require('./routes/user/movie');
+const cast  = require('./routes/user/cast');
+const theater  = require('./routes/user/theater');
+const movieSchedule  = require('./routes/user/movieSchedule');
+const seat  = require('./routes/user/seat');
+const review  = require('./routes/user/review');
 
 const ServiceManagerRouter = require("./routes/ServiceManager");
 const SuggestManager = require("./routes/SuggestManager");
@@ -21,6 +25,7 @@ const ScheduleRouter = require("./routes/ScheduleManager");
 const PORT = "3000";
 const app = express();
 app.use(express.json());
+app.use(cors());
 app.use(passport.initialize());
 passportConfig();
 // !important! router 'auth' locate before jwt strategy
@@ -33,6 +38,9 @@ app.use("/users", user);
 app.use("/movies", movie);
 app.use("/cast", cast);
 app.use("/theater", theater);
+app.use("/movieSchedule", movieSchedule);
+app.use("/seats", seat);
+app.use("/reviews", review);
 
 app.use("/attendant", attendant);
 app.use("/schedule", schedule);
