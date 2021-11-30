@@ -16,11 +16,13 @@ const movieSchedule  = require('./routes/user/movieSchedule');
 const seat  = require('./routes/user/seat');
 const review  = require('./routes/user/review');
 
+const RequestManager = require("./routes/requestManager");
 const ServiceManagerRouter = require("./routes/ServiceManager");
 const SuggestManager = require("./routes/SuggestManager");
 const MenuviewsRouter = require("./routes/Menuview");
 const CheckManagerRouter = require("./routes/CheckManager");
 const ScheduleRouter = require("./routes/ScheduleManager");
+const reserveManager = require("./routes/user/reserveManager");
 
 const PORT = "3000";
 const app = express();
@@ -38,6 +40,8 @@ app.use("/users", user);
 app.use("/movies", movie);
 app.use("/cast", cast);
 app.use("/theater", theater);
+
+app.use("/reserve", reserveManager);
 app.use("/movieSchedule", movieSchedule);
 app.use("/seats", seat);
 app.use("/reviews", review);
@@ -47,6 +51,7 @@ app.use("/schedule", schedule);
 
 app.use("/service", ServiceManagerRouter);
 app.use("/suggestion", SuggestManager);
+app.use("/request",RequestManager);
 app.use("/menu", MenuviewsRouter);
 app.use("/check", CheckManagerRouter);
 app.use("/employee", ScheduleRouter);
@@ -63,3 +68,4 @@ app.use(function (req, res, next) {
 app.listen(PORT, () => {
   console.log(`listening at ${PORT}`);
 });
+

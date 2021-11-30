@@ -32,14 +32,25 @@ router.get('/notice',async(req,res,next)=>{
     }
 });
     
-router.get('/compliment/:employeeID',async(req,res,next)=>{
+router.get('/compliment/:employeeID(\\d+)',async(req,res,next)=>{
     const {employeeID} = req.params;
     const complimentE = await Compliment.findAll({
         attributes : ["employee_id","compliment_id", "content","compliment_count"],
-        where : {employee_id: employeeID}
+        where : {employee_id: employeeID},
         });
         return res.json({complimentE});
 });
+
+       
+router.get('/compliment/ranking',async(req,res,next)=>{
+    const complimentRank = await Compliment.findAll({
+        attributes : ["employee_id", "compliment_count"],
+        
+        order : [['compliment_count', 'DESC']]
+        });
+        return res.json({complimentRank});
+});
+
 
 router.get('/compliment',async(req,res,next)=>{
     const complimentE = await Compliment.findAll();
@@ -89,7 +100,7 @@ router.post('/compliment', function(req,res){
     Compliment.create({
         employee_id : employee_id,
         content : content,
-        compliment_count :  compliment_count
+        compliment_count :  compliment_count+1
     }).then(function(createdCompliment){
         res.json({employee_id, content, compliment_count});
     })
