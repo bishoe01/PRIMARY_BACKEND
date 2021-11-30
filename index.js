@@ -1,9 +1,12 @@
 const express = require("express");
-const Sequelize = require("sequelize");
+const passport = require("passport");
+const passportConfig = require("./config/passport");
 const cors = require("cors");
 
 const attendant = require("./routes/attendant");
 const schedule = require("./routes/schedule");
+const auth = require("./routes/auth");
+const payment = require("./routes/payment");
 
 const user = require('./routes/user/user');
 const movie = require('./routes/user/movie');
@@ -23,6 +26,13 @@ const PORT = "3000";
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use(passport.initialize());
+passportConfig();
+// !important! router 'auth' locate before jwt strategy
+// if app use jwt
+app.use("/payment", payment);
+app.use("/auth", auth);
+app.use(passport.authenticate("jwt", { session: false }));
 
 app.use("/users", user);
 app.use("/movies", movie);
@@ -43,8 +53,11 @@ app.use("/employee", ScheduleRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  console.log(err instanceof Sequelize.BaseError);
-  res.status(500).json({ err: err, stack: err.stack });
+  res.status(500).json({ stack: err.stack });
+});
+
+app.use(function (req, res, next) {
+  res.status(404).send("404 cannot find resource 오타 없는지 확인해주세요");
 });
 
 app.listen(PORT, () => {
