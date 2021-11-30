@@ -9,28 +9,33 @@ const theaterModel = models.Theater;
 
 // api 11번. 극장 목록
 
-// api 6번. 특정 영화 정보 조회
-router.get("", async (req,res) => {
+router.get("/", async (req,res) => {
+    const {theaterAddress} = req.query;
 
-    const theaterListQuery = `select theater_name from Theater where is_deleted = 'N';`
+    if (!theaterAddress) {
+        //theaterID 빈 값인 경우
+        return res.json ("theaterAddress를 입력하시오.")
+    } else {
+        //지역별 극장 조회
+        return res.json ( await sequelize.query(
+            `select theater_name from Theater where address = :theaterAddress and is_deleted = 'N';`,
+            {
+                replacements: {theaterAddress: theaterAddress},
+                type: Sequelize.QueryTypes.SELECT,
+                raw: true
+            })
+        )
 
 
-    let theaterList = await sequelize.query(
-        theaterListQuery,
-        {
-            type: Sequelize.QueryTypes.SELECT,
-            raw: true
-        });
+    }
 
-    return res.json ({theaterList});
-
-})
+});
 
 // api 12번. 특정 극장 조회
 router.get("/:theaterID", async (req,res) => {
     const {theaterID} = req.params;
 
-    const theaterInfoQuery = `select theater_name, theater_image, address, address_code, introduction from Theater where theater_id = :theater_id;
+    const theaterInfoQuery = `select theater_name, theater_image, address_detail, address_code, introduction from Theater where theater_id = :theater_id;
     `
 
 
