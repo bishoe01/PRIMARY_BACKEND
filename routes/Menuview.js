@@ -1,8 +1,10 @@
 const express = require('express');
 const m = require("../models/init-models");
+const Sequelize = require('sequelize');
 const sequelize = require("../models").sequelize;
 const models = m(sequelize);
 const Menu = models.Menu;
+const Employee = models.Employee;
 const router = express.Router();
 router.get('/',async(req,res,next)=>{
     const {type} = req.query;
@@ -12,7 +14,6 @@ router.get('/',async(req,res,next)=>{
         });
         res.send({menus});
     }catch(error){
-        console.log.error(error);
         next(error);
     }
 });
@@ -24,10 +25,23 @@ router.get('/list',async(req,res,next)=>{
         );
         res.send({menus});
     }catch(error){
-        console.log.error(error);
         next(error);
     }
 });
+
+router.get('/employee',async(req,res,next)=>{
+    const {menu_want} = req.query
+    return res.json ( await sequelize.query(
+        `select COUNT(menu_want) as count from Employee
+        where menu_want=${menu_want}
+        `,
+        {
+            replacements: {menu_want: menu_want},
+            type: Sequelize.QueryTypes.SELECT,
+            raw: true
+        })
+    )
+})
 
 router.get('/:menuID',async(req,res,next)=>{
     const {menuID} = req.params;

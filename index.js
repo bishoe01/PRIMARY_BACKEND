@@ -11,6 +11,7 @@ const cast = require("./routes/user/cast");
 const theater = require("./routes/user/theater");
 const reserveManager = require("./routes/user/reserveManager");
 
+const RequestManager = require("./routes/requestManager");
 const ServiceManagerRouter = require("./routes/ServiceManager");
 const SuggestManager = require("./routes/SuggestManager");
 const MenuviewsRouter = require("./routes/Menuview");
@@ -33,6 +34,7 @@ app.use("/schedule", schedule);
 
 app.use("/service", ServiceManagerRouter);
 app.use("/suggestion", SuggestManager);
+app.use("/request",RequestManager);
 app.use("/menu", MenuviewsRouter);
 app.use("/check", CheckManagerRouter);
 app.use("/employee", ScheduleRouter);
