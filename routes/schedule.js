@@ -27,42 +27,37 @@ router.get("/", async (req, res) => {
   res.json(r);
 });
 
-router.post("/", async (req, res) => {
-  const {
+router.post("/", async (req, res, next) => {
+  const payload = ({
     title,
     description,
     start_date,
     end_date,
     attend_time,
     leave_time,
-    is_approved,
     schedule_type,
     employee_id,
     totalwork_time,
-  } = req.body;
-  await scheduleModel.create({
-    title,
-    description,
-    start_date,
-    end_date,
-    attend_time,
-    leave_time,
-    is_approved,
-    schedule_type,
-    employee_id,
-    totalwork_time,
-  });
-
-  res.status(201).end();
+  } = req.body);
+  try {
+    await scheduleModel.create(payload);
+    res.status(201).end();
+  } catch (error) {
+    next(error);
+  }
 });
 
-router.put("/", (req, res) => {
-  const { employee_id } = req.query;
-  const { title } = req.body;
-  scheduleModel.update(
-    { title: title },
-    { where: { employee_id: employee_id } }
-  );
+router.patch("/:schedule_id", async (req, res, next) => {
+  const { schedule_id } = req.params;
+  const payload = req.body;
+  try {
+    const a = await scheduleModel.update(payload, {
+      where: { schedule_id: schedule_id },
+    });
+    res.send(a);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

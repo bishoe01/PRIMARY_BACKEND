@@ -1,5 +1,6 @@
 const DataTypes = require("sequelize").DataTypes;
 const _Absence = require("./Absence");
+const _Admin = require("./Admin");
 const _Attendant = require("./Attendant");
 const _Booked_seat = require("./Booked_seat");
 const _Cart = require("./Cart");
@@ -35,6 +36,7 @@ const _Payment = require("./Payment");
 const _Product = require("./Product");
 const _Product_type = require("./Product_type");
 const _Refund = require("./Refund");
+const _Request = require("./Request");
 const _Reservation = require("./Reservation");
 const _Review = require("./Review");
 const _Schedule = require("./Schedule");
@@ -50,6 +52,7 @@ const _User = require("./User");
 
 function initModels(sequelize) {
   const Absence = _Absence(sequelize, DataTypes);
+  const Admin = _Admin(sequelize, DataTypes);
   const Attendant = _Attendant(sequelize, DataTypes);
   const Booked_seat = _Booked_seat(sequelize, DataTypes);
   const Cart = _Cart(sequelize, DataTypes);
@@ -85,6 +88,7 @@ function initModels(sequelize) {
   const Product = _Product(sequelize, DataTypes);
   const Product_type = _Product_type(sequelize, DataTypes);
   const Refund = _Refund(sequelize, DataTypes);
+  const Request = _Request(sequelize, DataTypes);
   const Reservation = _Reservation(sequelize, DataTypes);
   const Review = _Review(sequelize, DataTypes);
   const Schedule = _Schedule(sequelize, DataTypes);
@@ -120,10 +124,14 @@ function initModels(sequelize) {
   Employee.hasMany(Leave, { as: "Leaves", foreignKey: "employee_id"});
   Pay_record.belongsTo(Employee, { as: "employee", foreignKey: "employee_id"});
   Employee.hasMany(Pay_record, { as: "Pay_records", foreignKey: "employee_id"});
+  Request.belongsTo(Employee, { as: "employee", foreignKey: "employee_id"});
+  Employee.hasMany(Request, { as: "Requests", foreignKey: "employee_id"});
   Schedule.belongsTo(Employee, { as: "employee", foreignKey: "employee_id"});
   Employee.hasMany(Schedule, { as: "Schedules", foreignKey: "employee_id"});
   Status_now.belongsTo(Employee, { as: "employee", foreignKey: "employee_id"});
   Employee.hasMany(Status_now, { as: "Status_nows", foreignKey: "employee_id"});
+  Suggestion.belongsTo(Employee, { as: "employee", foreignKey: "employee_id"});
+  Employee.hasMany(Suggestion, { as: "Suggestions", foreignKey: "employee_id"});
   Screen_management.belongsTo(Facility, { as: "facility", foreignKey: "facility_id"});
   Facility.hasMany(Screen_management, { as: "Screen_managements", foreignKey: "facility_id"});
   Genre_of_movie.belongsTo(Genre, { as: "genre", foreignKey: "genre_id"});
@@ -140,8 +148,8 @@ function initModels(sequelize) {
   Movie.hasMany(Country_of_movie, { as: "Country_of_movies", foreignKey: "movie_id"});
   Genre_of_movie.belongsTo(Movie, { as: "movie", foreignKey: "movie_id"});
   Movie.hasMany(Genre_of_movie, { as: "Genre_of_movies", foreignKey: "movie_id"});
-  Like_movie.belongsTo(Movie, { as: "movie_id2_Movie", foreignKey: "movie_id2"});
-  Movie.hasMany(Like_movie, { as: "Like_movies", foreignKey: "movie_id2"});
+  Like_movie.belongsTo(Movie, { as: "movie", foreignKey: "movie_id"});
+  Movie.hasMany(Like_movie, { as: "Like_movies", foreignKey: "movie_id"});
   Movie_schedule.belongsTo(Movie, { as: "movie", foreignKey: "movie_id"});
   Movie.hasMany(Movie_schedule, { as: "Movie_schedules", foreignKey: "movie_id"});
   Review.belongsTo(Movie, { as: "movie", foreignKey: "movie_id"});
@@ -195,6 +203,7 @@ function initModels(sequelize) {
 
   return {
     Absence,
+    Admin,
     Attendant,
     Booked_seat,
     Cart,
@@ -230,6 +239,7 @@ function initModels(sequelize) {
     Product,
     Product_type,
     Refund,
+    Request,
     Reservation,
     Review,
     Schedule,

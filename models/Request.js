@@ -1,56 +1,50 @@
 const Sequelize = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  return Suggestion.init(sequelize, DataTypes);
+  return Request.init(sequelize, DataTypes);
 }
 
-class Suggestion extends Sequelize.Model {
+class Request extends Sequelize.Model {
   static init(sequelize, DataTypes) {
   super.init({
-    suggestion_id: {
+    request_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
-      primaryKey: true,
-      comment: "건의id"
+      primaryKey: true
     },
-    suggestion_type: {
+    request_type: {
       type: DataTypes.CHAR(1),
-      allowNull: false,
-      comment: "건의유형"
+      allowNull: true
     },
     title: {
       type: DataTypes.STRING(20),
-      allowNull: false,
-      comment: "제목"
+      allowNull: true
     },
     content: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-      comment: "내용"
+      type: DataTypes.STRING(200),
+      allowNull: true
     },
     result: {
       type: DataTypes.STRING(100),
-      allowNull: true,
-      comment: "결과"
+      allowNull: true
     },
     date: {
       type: DataTypes.DATEONLY,
-      allowNull: false,
-      comment: "날짜"
+      allowNull: true
     },
     created_at: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     },
     updated_at: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP')
     },
     is_deleted: {
       type: DataTypes.CHAR(1),
-      allowNull: false,
+      allowNull: true,
       defaultValue: "N"
     },
     employee_id: {
@@ -67,7 +61,7 @@ class Suggestion extends Sequelize.Model {
     }
   }, {
     sequelize,
-    tableName: 'Suggestion',
+    tableName: 'Request',
     timestamps: false,
     indexes: [
       {
@@ -75,11 +69,11 @@ class Suggestion extends Sequelize.Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "suggestion_id" },
+          { name: "request_id" },
         ]
       },
       {
-        name: "FK_Employee_TO_Suggestion_1",
+        name: "employee_id",
         using: "BTREE",
         fields: [
           { name: "employee_id" },
@@ -87,6 +81,6 @@ class Suggestion extends Sequelize.Model {
       },
     ]
   });
-  return Suggestion;
+  return Request;
   }
 }

@@ -75,6 +75,10 @@ class Employee extends Sequelize.Model {
       type: DataTypes.CHAR(1),
       allowNull: false,
       defaultValue: "N"
+    },
+    menu_want: {
+      type: DataTypes.CHAR(1),
+      allowNull: true
     }
   }, {
     sequelize,
