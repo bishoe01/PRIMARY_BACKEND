@@ -23,10 +23,10 @@ class Theater extends Sequelize.Model {
       allowNull: false,
       comment: "주소"
     },
-    address_code: {
-      type: DataTypes.INTEGER,
+    address_detail: {
+      type: DataTypes.STRING(50),
       allowNull: false,
-      comment: "우편번호"
+      comment: "상세 주소"
     },
     introduction: {
       type: DataTypes.STRING(500),
@@ -55,6 +55,11 @@ class Theater extends Sequelize.Model {
       allowNull: false,
       defaultValue: Sequelize.Sequelize.literal('CURRENT_TIMESTAMP'),
       comment: "생성일"
+    },
+    address_code: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      comment: "우편번호"
     }
   }, {
     sequelize,

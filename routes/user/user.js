@@ -87,12 +87,13 @@ router.get("/:userID", async (req,res) => {
 router.get("/:userID/reservations", async (req,res) => {
     const {userID} = req.params;
 
-    const userReservationListQuery = `select title, date_format(start_time,'%Y.%m.%d %H:%i') as start_time,date_format(end_time,'%Y.%m.%d %H:%i')as end_time,theater_name,hall_name,date(Reservation.create_at) as reservedDate, concat(count(seat_id),'명 관람') as numberOfSeats, parking_barcode from Reservation
+    const userReservationListQuery = `select title, date_format(start_time,'%Y.%m.%d %H:%i') as start_time,date_format(end_time,'%Y.%m.%d %H:%i')as end_time,theater_name,hall_name,date(Reservation.create_at) as reservedDate, concat(count(Bs.seat_id),'명 관람') as numberOfSeats, group_concat(seat_row_col) as seat_row_col, parking_barcode from Reservation
         inner join Movie_schedule Ms on Reservation.movie_schedule_id = Ms.movie_schedule_id
                                           inner join Movie M on Ms.movie_id = M.movie_id
                                           inner join Booked_seat Bs on Reservation.reservation_id = Bs.reservation_id
                                           inner join Hall H on Ms.hall_id = H.hall_id
                                           inner join Theater T on H.theater_id = T.theater_id
+                                          inner join Seat S on Bs.seat_id = S.seat_id
                                       where user_id = :user_id
                                       group by start_time;`
 

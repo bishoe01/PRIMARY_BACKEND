@@ -19,7 +19,7 @@ router.get("/", async (req,res) => {
     } else {
         //극장 - 날짜별 영화, 상영스케줄 목록 조회
         return res.json ( await sequelize.query(
-            `select title,running_time,group_concat(genre_name) as genre,open_date, hall_name, if (H.type = 1, '2D', '3D') as type, start_time, end_time
+            `select title,running_time,group_concat(genre_name) as genre,open_date, hall_name, if (H.type = 1, '2D', '3D') as type, date_format(start_time,'%Y.%m.%d %H:%i') as start_time, date_format(end_time,'%Y.%m.%d %H:%i') as end_time
              from Movie_schedule
 
                       inner join Movie M on Movie_schedule.movie_id = M.movie_id

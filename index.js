@@ -10,6 +10,7 @@ const cast  = require('./routes/user/cast');
 const theater  = require('./routes/user/theater');
 const movieSchedule  = require('./routes/user/movieSchedule');
 const seat  = require('./routes/user/seat');
+const review  = require('./routes/user/review');
 
 const ServiceManagerRouter = require('./routes/ServiceManager');
 const SuggestManager = require('./routes/SuggestManager');
@@ -27,6 +28,7 @@ app.use("/cast", cast);
 app.use("/theater", theater);
 app.use("/movieSchedule", movieSchedule);
 app.use("/seats", seat);
+app.use("/reviews", review);
 
 app.use("/attendant", attendant);
 app.use("/schedule", schedule);
