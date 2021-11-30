@@ -16,7 +16,7 @@ const movieSchedule  = require('./routes/user/movieSchedule');
 const seat  = require('./routes/user/seat');
 const review  = require('./routes/user/review');
 
-const RequestManager = require("./routes/requestManager");
+const RequestManager = require("./routes/RequestManager");
 const ServiceManagerRouter = require("./routes/ServiceManager");
 const SuggestManager = require("./routes/SuggestManager");
 const MenuviewsRouter = require("./routes/Menuview");
