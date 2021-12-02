@@ -13,17 +13,11 @@ class Seat extends Sequelize.Model {
       primaryKey: true,
       comment: "좌석 id"
     },
-    seat_row: {
-      type: DataTypes.CHAR(1),
+    seat_row_col: {
+      type: DataTypes.CHAR(5),
       allowNull: false,
-      defaultValue: "A",
+      defaultValue: "A1",
       comment: "좌석 열"
-    },
-    seat_col: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 1,
-      comment: "좌석 행"
     },
     seat_type: {
       type: DataTypes.CHAR(1),
