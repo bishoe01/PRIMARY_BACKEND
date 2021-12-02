@@ -1,5 +1,6 @@
 const DataTypes = require("sequelize").DataTypes;
 const _Absence = require("./Absence");
+const _Admin = require("./Admin");
 const _Attendant = require("./Attendant");
 const _Booked_seat = require("./Booked_seat");
 const _Cart = require("./Cart");
@@ -51,6 +52,7 @@ const _User = require("./User");
 
 function initModels(sequelize) {
   const Absence = _Absence(sequelize, DataTypes);
+  const Admin = _Admin(sequelize, DataTypes);
   const Attendant = _Attendant(sequelize, DataTypes);
   const Booked_seat = _Booked_seat(sequelize, DataTypes);
   const Cart = _Cart(sequelize, DataTypes);
@@ -201,6 +203,7 @@ function initModels(sequelize) {
 
   return {
     Absence,
+    Admin,
     Attendant,
     Booked_seat,
     Cart,
