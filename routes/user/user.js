@@ -7,35 +7,36 @@ const models = m(sequelize);
 const userModel = models.User;
 
 
-// api 2번. 회원가입
-router.post("/join", async (req,res) => {
-    const {name, login_id, password, nickname, phone_number, email, birth, } = req.body;
-
-    //아이디 중복확인 필요
-    const IDCheck = await userModel.count({
-        where : {login_id : login_id}
-    });
-
-    if (IDCheck > 0) {
-        return res.json("중복된 아이디입니다.")
-    }
-
-
-    const userCreate = await userModel.create({
-
-        name : name,
-        login_id : login_id,
-        password : password,
-        nickname : nickname,
-        phone_number : phone_number,
-        email : email,
-        birth : birth
-
-    });
-
-    return res.json ("success Join");
-
-})
+// // api 2번. 회원가입
+// router.post("/join", async (req,res) => {
+//     const {name, login_id, password, nickname, phone_number, email, birth, } = req.body;
+//
+//     //아이디 중복확인 필요
+//     const IDCheck = await userModel.count({
+//         where : {login_id : login_id}
+//     });
+//     console.log(IDCheck);
+//
+//     if (IDCheck > 0 ) {
+//         return res.json("중복된 아이디입니다.")
+//     }
+//
+//
+//     const userCreate = await userModel.create({
+//
+//         name : name,
+//         login_id : login_id,
+//         password : password,
+//         nickname : nickname,
+//         phone_number : phone_number,
+//         email : email,
+//         birth : birth
+//
+//     });
+//
+//     return res.json ("success Join");
+//
+// })
 
 
 
@@ -109,6 +110,61 @@ router.get("/:userID/reservations", async (req,res) => {
     return res.json ({userReservationList});
 
 })
+
+
+// // api 15번. 좋아요누르기
+router.post("/likemovie", async (req,res) => {
+    const {user_id, movie_id} = req.body;
+
+    const findLikeMovieQuery = `select count(is_deleted) as count from Like_movie where user_id = :user_id and movie_id = :movie_id;`
+
+    const updateToYQuery = `update Like_movie set is_deleted ='Y' ,update_at = now() where user_id = :user_id and movie_id = :movie_id;`
+
+    const updateToNQuery = `update Like_movie set is_deleted ='N' ,update_at = now() where user_id = :user_id and movie_id = :movie_id;`
+
+    const insertLikeMovieQuery = `INSERT INTO Like_movie(user_id, movie_id) VALUES (:user_id, :movie_id);`
+
+
+    let findInLikeMovie = await sequelize.query(
+        findLikeMovieQuery,
+        {
+            replacements: {user_id : user_id, movie_id : movie_id},
+            type: Sequelize.QueryTypes.SELECT,
+            raw: true
+        });
+
+    console.log(findInLikeMovie[0]["count"] + "찾기");
+
+    if (findInLikeMovie[0]["count"] == 0) {await sequelize.query(
+        insertLikeMovieQuery,
+        {
+            replacements: {user_id : user_id, movie_id : movie_id},
+            type: Sequelize.QueryTypes.INSERT,
+            raw: true
+        });
+        return res.json ("insert like_movie");
+    } else if (findInLikeMovie[0]["is_deleted"] == 'N') {await sequelize.query(
+        updateToYQuery,
+            {
+                replacements: {user_id : user_id, movie_id : movie_id},
+                type: Sequelize.QueryTypes.UPDATE,
+                raw: true
+            });
+        return res.json ("update like_movie to Y");
+
+    } else if (findInLikeMovie[0]["is_deleted"] == 'Y') {
+        await sequelize.query(
+            updateToNQuery,
+            {
+                replacements: {user_id : user_id, movie_id : movie_id},
+                type: Sequelize.QueryTypes.UPDATE,
+                raw: true
+            });
+        return res.json("update like_movie to N");
+
+    }
+})
+
 
 
 // api 16번. 좋아요 누른 영화 조회 API

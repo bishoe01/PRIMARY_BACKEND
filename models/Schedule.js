@@ -46,6 +46,7 @@ class Schedule extends Sequelize.Model {
     is_approved: {
       type: DataTypes.BOOLEAN,
       allowNull: true,
+      defaultValue: 0,
       comment: "승인 여부"
     },
     schedule_type: {
