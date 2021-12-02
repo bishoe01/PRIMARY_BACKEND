@@ -44,6 +44,7 @@ router.get('/compliment/:employeeID(\\d+)',async(req,res,next)=>{
        
 router.get('/compliment/ranking',async(req,res,next)=>{
     const complimentRank = await Compliment.findAll({
+        limit :3,
         attributes : ["employee_id", "compliment_count"],
         
         order : [['compliment_count', 'DESC']]

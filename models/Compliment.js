@@ -13,11 +13,6 @@ class Compliment extends Sequelize.Model {
       primaryKey: true,
       comment: "칭찬id"
     },
-    compliment_date: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      comment: "날짜"
-    },
     content: {
       type: DataTypes.STRING(100),
       allowNull: true,
