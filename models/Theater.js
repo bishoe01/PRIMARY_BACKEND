@@ -58,7 +58,7 @@ class Theater extends Sequelize.Model {
     },
     address_code: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       comment: "우편번호"
     }
   }, {

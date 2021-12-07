@@ -22,7 +22,7 @@ router.post(
   (req, res) => {
     const payload = { user: req.user.toJSON(), type: "employee" };
     const token = jwt.sign(payload, "secret");
-    res.json({ jwt: token });
+    res.json({ jwt: token, name: req.user.name });
   }
 );
 

@@ -3,6 +3,7 @@ const m = require("../models/init-models");
 const sequelize = require("../models").sequelize;
 const models = m(sequelize);
 const attendantModel = models.Attendant;
+const employeeModel = models.Employee;
 
 router.get("/", async (req, res) => {
   const { employee_id } = req.query;
@@ -11,6 +12,11 @@ router.get("/", async (req, res) => {
   if (employee_id) {
     b = await attendantModel.findAll({
       where: { employee_id: employee_id },
+      include: {
+        model: employeeModel,
+        as: "employee",
+        attributes: ["name"],
+      },
     });
   } else {
     b = await attendantModel.findAll();
