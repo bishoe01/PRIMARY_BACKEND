@@ -1,4 +1,5 @@
 const express = require('express');
+const Sequelize = require('sequelize');
 const m = require("../models/init-models");
 const sequelize = require("../models").sequelize;
 const models = m(sequelize);
@@ -14,18 +15,35 @@ router.get('/',async(req,res,next)=>{
     }
 });
 
+// router.get('/:requestID',async(req,res,next)=>{
+//     const {requestID} = req.params;
+//     try{
+//         const requests = await Employee_Request.findAll({
+//             where : {request_id : requestID}
+//         });
+//         res.send({requests});
+//     }catch(error){
+//         console.log.error(error);
+//         next(error);
+//     }
+// });
+
 router.get('/:requestID',async(req,res,next)=>{
     const {requestID} = req.params;
-    try{
-        const requests = await Employee_Request.findAll({
-            where : {request_id : requestID}
-        });
-        res.send({requests});
-    }catch(error){
-        console.log.error(error);
-        next(error);
+    {
+        //극장 - 날짜별 영화, 상영스케줄 목록 조회
+        return res.json ( await sequelize.query(
+            `SELECT request_id,name  from Request
+            inner join Employee E on Request.employee_id = E.employee_id
+            where request_id = request_id;
+`,
+            {
+                type: Sequelize.QueryTypes.SELECT,
+                raw: true
+            })
+        )
     }
-});
+})
 
 router.patch('/:requestID',async(req,res,next)=>{
     const {requestID} = req.params;

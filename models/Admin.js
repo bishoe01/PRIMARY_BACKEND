@@ -19,6 +19,10 @@ class Admin extends Sequelize.Model {
     password: {
       type: DataTypes.STRING(30),
       allowNull: true
+    },
+    name: {
+      type: DataTypes.STRING(30),
+      allowNull: true
     }
   }, {
     sequelize,

@@ -30,10 +30,11 @@ router.get('/list',async(req,res,next)=>{
 });
 
 router.get('/employee',async(req,res,next)=>{
-    const {menu_want} = req.query
+    const {menu_want} = req.query;
     return res.json ( await sequelize.query(
-        `select COUNT(menu_want) as count from Employee
-        where menu_want=${menu_want}
+        `SELECT employee_id,name,department_id from Menu
+        inner join Employee
+        where menu_want = ${menu_want};
         `,
         {
             replacements: {menu_want: menu_want},
@@ -41,6 +42,47 @@ router.get('/employee',async(req,res,next)=>{
             raw: true
         })
     )
+})
+
+router.get('/employee/:menu_type',async(req,res,next)=>{
+    const {menu_type} = req.params;
+    if(menu_type == 'B'){
+        return res.json ( await sequelize.query(
+            `SELECT employee_id,name,department_id from Menu
+            inner join Employee
+            where menu_want = 1 or menu_want = 4 or menu_want =5;
+            `,
+            {
+                type: Sequelize.QueryTypes.SELECT,
+                raw: true
+            })
+        )
+    }
+    else if (menu_type =='L'){
+        return res.json ( await sequelize.query(
+            `SELECT employee_id,name,department_id from Menu
+            inner join Employee
+            where menu_want = 2 or menu_want = 4 or menu_want =6;
+            `,
+            {
+                type: Sequelize.QueryTypes.SELECT,
+                raw: true
+            })
+        )
+    }
+    else if (menu_type =='D'){
+        return res.json ( await sequelize.query(
+            `SELECT employee_id,name,department_id from Menu
+            inner join Employee
+            where menu_want = 3 or menu_want = 5 or menu_want =6;
+            `,
+            {
+                type: Sequelize.QueryTypes.SELECT,
+                raw: true
+            })
+        )
+    }
+    
 })
 
 router.get('/:menuID',async(req,res,next)=>{
