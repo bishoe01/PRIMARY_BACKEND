@@ -1,19 +1,49 @@
-const express = require('express');
+const router = require('express').Router();
+const Sequelize = require('sequelize');
 const m = require("../models/init-models");
 const sequelize = require("../models").sequelize;
 const models = m(sequelize);
-const Status = models.Status_now;
-const left = models.Leave;
+const Status_now = models.Status_now;
+const Leave = models.Leave;
 const Holiday = models.Holiday;
-const router = express.Router();
+const Employee = models.Employee;
+
+// router.get('/leave',async(req,res,next)=>{
+//     try{
+//         const leavelist = await Leave.findAll({
+//             attributes : ["leave_id","start_date","end_date","leave_type","created_at"],
+//             include :[{model: models.Employee}]
+//         });
+//         res.send({leavelist});
+//     }catch(error){
+//         next(error);
+//     }
+// });
+
+router.get('/leave/list',async(req,res,next)=>{
+    try{
+        const leave = await Leave.findAll({
+            include:[{model: models.Employee, 
+                as:"employee",
+            attributes: ['name']}]
+        ,
+            attributes : ["leave_id","start_date","end_date","leave_type"],
+            
+        });
+        res.send({leave});
+    }catch(error){
+        next(error);
+    }
+});
+
 
 
 router.get('/:employeeID/now',async(req,res,next)=>{
     const {employeeID} = req.params;
     try{
-        const statuslist = await Status.findAll({
+        const statuslist = await Status_now.findAll({
             attributes : ["employee_id","status", "start_date","end_date"],
-            where:{employee_id:employeeID}
+            
         });
         res.send({statuslist});
     }catch(error){
@@ -24,7 +54,7 @@ router.get('/:employeeID/now',async(req,res,next)=>{
 
 router.post('/now', function(req,res){
     const {employee_id,status,start_date,end_date,created_at,updated_at,is_deleted} = req.body;
-    Status.create({
+    Status_now.create({
         employee_id : employee_id,
         status :  status,
         start_date : start_date,
@@ -38,10 +68,10 @@ router.post('/now', function(req,res){
 });
 
 //휴가
-router.get('/:employeeID/leave',async(req,res,next)=>{
+router.get('/:employeeID(\\+d+)/leave',async(req,res,next)=>{
     const {employeeID}  = req.params;
     try{
-        const leaves = await left.findAll({
+        const leaves = await Leave.findAll({
             attributes : ["employee_id","leave_id", "start_date","end_date","leave_type","reason","is_approved"],
             where : {employee_id : employeeID}
         });
@@ -51,19 +81,29 @@ router.get('/:employeeID/leave',async(req,res,next)=>{
         next(error);
     }
 });
+// router.get('/leave',async(req,res,next)=>{
+//     try{
+//         const leaves = await left.findAll({
+//             attributes : ["leave_id","", ""]
+//         }
+            
+//         );
+//         res.send({leaves});
+//     }catch(error){
+//         next(error);
+//     }
+// });
+
 
 router.post('/leave', function(req,res){
     const {employee_id,start_date,end_date,leave_type,reason,is_approved, created_at,updated_at,is_deleted} = req.body;
-    left.create({
+    Leave.create({
         employee_id : employee_id,
         leave_type :  leave_type,
         reason : reason,
         is_approved:is_approved,
         start_date : start_date,
-        end_date:end_date,
-        created_at : created_at,
-        updated_at : updated_at,
-        is_deleted : is_deleted
+        end_date:end_date
     }).then(function(createLeave){
         res.json({employee_id,start_date,end_date,leave_type,reason,is_approved, created_at,updated_at,is_deleted});
     })
