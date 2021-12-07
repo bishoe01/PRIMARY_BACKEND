@@ -9,19 +9,32 @@ const Employee_notice = models.Employee_notice;
 const Employee_event = models.Event;
 //notice , event , compliment
 
-//get
+// router.get('/notice/:noticeID',async(req,res,next)=>{
+//     const {noticeID} = req.params;
+//     try{
+//         const notices = await Employee_notice.findAll({
+//             where : {employee_notice_id :noticeID }
+//         });
+//         res.send({notices});
+//     }catch(error){
+//         console.log.error(error);
+//         next(error);
+//     }
+// });
+
 router.get('/notice/:noticeID',async(req,res,next)=>{
     const {noticeID} = req.params;
-    try{
+    {   await sequelize.query(`UPDATE Employee_notice SET view_count=view_count+1 where employee_notice_id=1;`,
+            {
+                type: Sequelize.QueryTypes.UPDATE,
+                raw: true
+            })
         const notices = await Employee_notice.findAll({
-            where : {employee_notice_id :noticeID }
-        });
-        res.send({notices});
-    }catch(error){
-        console.log.error(error);
-        next(error);
+                where : {employee_notice_id :noticeID }
+            });
+            res.send({notices});
     }
-});
+})
 
 router.get('/notice',async(req,res,next)=>{
     try{
@@ -33,6 +46,24 @@ router.get('/notice',async(req,res,next)=>{
     }
 });
     
+// router.get('/notice/:noticeID',async(req,res,next)=>{
+//     const {noticeID} = req.params;
+//     try{
+//         Employee_notice.update({
+//             view_count
+//         },{where : {notice_id: noticeID}}
+//         )
+//         const notices = await Employee_notice.findAll({
+//             where : {notice_id : noticeID}}
+//         );
+//         res.send({notices});
+//     }catch(error){
+//         console.log.error(error);
+//         next(error);
+//     }
+// });
+    
+
 router.get('/compliment/:employeeID(\\d+)',async(req,res,next)=>{
     const {employeeID} = req.params;
     const complimentE = await Compliment.findAll({
@@ -43,15 +74,15 @@ router.get('/compliment/:employeeID(\\d+)',async(req,res,next)=>{
 });
 
        
-router.get('/compliment/ranking',async(req,res,next)=>{
-    const complimentRank = await Compliment.findAll({
-        limit :3,
-        attributes : ["name", "compliment_count"],
+// router.get('/compliment/ranking',async(req,res,next)=>{
+//     const complimentRank = await Compliment.findAll({
+//         limit :3,
+//         attributes : ["name", "compliment_count"],
         
-        order : [['compliment_count', 'DESC']]
-        });
-        return res.json({complimentRank});
-});
+//         order : [['compliment_count', 'DESC']]
+//         });
+//         return res.json({complimentRank});
+// });
 
 router.get('/compliment/rank',async(req,res,next)=>{
     {
@@ -88,6 +119,23 @@ router.get('/event',async(req,res,next)=>{
     }
 });
 
+router.patch('/notice/:emplyee_notice_id',async(req,res,next)=>{
+    const {emplyee_notice_id} = req.params;
+    const {notice_writer} = req.body;
+    const {notice_title} = req.body;
+    const {notice_content} = req.body;
+    
+    try{
+        await Employee_notice.update({
+            notice_title, notice_content,notice_writer
+        },{where : {employee_notice_id : emplyee_notice_id}});
+        const updateresult =  await Employee_notice.findByPk(employee_notice_id);
+        res.json(updateresult);
+    }catch(error){
+        console.log.error(error);
+        next(error);
+    }
+});
 
 
 router.post('/notice', function(req,res){
