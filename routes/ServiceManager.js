@@ -1,4 +1,5 @@
 const router = require('express').Router();
+const Sequelize = require('sequelize');
 const m = require("../models/init-models");
 const sequelize = require("../models").sequelize;
 const models = m(sequelize);
@@ -45,13 +46,30 @@ router.get('/compliment/:employeeID(\\d+)',async(req,res,next)=>{
 router.get('/compliment/ranking',async(req,res,next)=>{
     const complimentRank = await Compliment.findAll({
         limit :3,
-        attributes : ["employee_id", "compliment_count"],
+        attributes : ["name", "compliment_count"],
         
         order : [['compliment_count', 'DESC']]
         });
         return res.json({complimentRank});
 });
 
+router.get('/compliment/rank',async(req,res,next)=>{
+    {
+        //극장 - 날짜별 영화, 상영스케줄 목록 조회
+        return res.json ( await sequelize.query(
+            `SELECT name, compliment_count from Compliment
+            inner join Employee E on Compliment.employee_id = E.employee_id
+            ORDER BY compliment_count DESC;`,
+            {
+                
+                type: Sequelize.QueryTypes.SELECT,
+                raw: true
+            })
+        )
+
+
+    }
+})
 
 router.get('/compliment',async(req,res,next)=>{
     const complimentE = await Compliment.findAll();
