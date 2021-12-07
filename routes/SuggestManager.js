@@ -6,7 +6,9 @@ const Employee_Suggestion = models.Suggestion;
 const router = express.Router();
 router.get('/',async(req,res,next)=>{
     try{
-        const suggestions = await Employee_Suggestion.findAll();
+        const suggestions = await Employee_Suggestion.findAll(
+            {include :{model: models.Employee, as: "employee",attributes:['name']}}
+        );
         res.send({suggestions});
     }catch(error){
         console.log.error(error);
@@ -18,6 +20,7 @@ router.get('/:suggestionID',async(req,res,next)=>{
     const {suggestionID} = req.params;
     try{
         const suggestions = await Employee_Suggestion.findAll({
+            include :{model: models.Employee, as: "employee",attributes:['name']},
             where : {suggestion_id : suggestionID}
         });
         res.send({suggestions});

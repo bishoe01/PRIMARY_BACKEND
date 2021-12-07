@@ -106,9 +106,6 @@ router.get('/compliment/rank',async(req,res,next)=>{
 });
 
 
-
-
-
 router.get('/event',async(req,res,next)=>{
     try{
         const events = await Employee_event.findAll({

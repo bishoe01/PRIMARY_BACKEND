@@ -43,7 +43,9 @@ router.get('/:employeeID/now',async(req,res,next)=>{
     try{
         const statuslist = await Status_now.findAll({
             attributes : ["employee_id","status", "start_date","end_date"],
-            
+            include:[{model: models.Employee, 
+                as:"employee",
+            attributes: ['name']}]
         });
         res.send({statuslist});
     }catch(error){
