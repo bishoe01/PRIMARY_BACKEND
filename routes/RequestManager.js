@@ -7,7 +7,9 @@ const Employee_Request = models.Request;
 const router = express.Router();
 router.get('/',async(req,res,next)=>{
     try{
-        const requests = await Employee_Request.findAll();
+        const requests = await Employee_Request.findAll(
+            {include :{model: models.Employee, as: "employee",attributes:['name']}}
+        );
         res.send({requests});
     }catch(error){
         console.log.error(error);
