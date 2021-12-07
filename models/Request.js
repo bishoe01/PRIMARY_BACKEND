@@ -26,7 +26,8 @@ class Request extends Sequelize.Model {
     },
     result: {
       type: DataTypes.STRING(100),
-      allowNull: true
+      allowNull: true,
+      defaultValue: "대기 중"
     },
     date: {
       type: DataTypes.DATEONLY,
@@ -57,7 +58,8 @@ class Request extends Sequelize.Model {
     },
     is_approved: {
       type: DataTypes.CHAR(1),
-      allowNull: true
+      allowNull: true,
+      defaultValue: "1"
     }
   }, {
     sequelize,

@@ -4,7 +4,6 @@ const m = require("../models/init-models");
 const sequelize = require("../models").sequelize;
 const models = m(sequelize);
 const Compliment = models.Compliment;
-const Leave = models.Leave;
 const Employee_notice = models.Employee_notice;
 const Employee_event = models.Event;
 //notice , event , compliment
@@ -65,15 +64,21 @@ router.get('/notice',async(req,res,next)=>{
 //     }
 // });
     
-
-router.get('/compliment/:employeeID(\\d+)',async(req,res,next)=>{
-    const {employeeID} = req.params;
-    const complimentE = await Compliment.findAll({
-        attributes : ["employee_id","compliment_id", "content","compliment_count"],
-        where : {employee_id: employeeID},
-        });
-        return res.json({complimentE});
+router.get('/compliment/:employee_id',async(req,res,next)=>{
+    const {employee_id} = req.params;
+    try{
+    const {complimentlist} = await Compliment.findAll({
+        include :{model: models.Employee, as: "employee",attributes:['name']},
+        where : {employee_id : employee_id}
+    });
+    res.json({complimentlist});
+    }catch(error){
+        next(error);
+    }
 });
+
+
+
 
        
 // router.get('/compliment/ranking',async(req,res,next)=>{
@@ -97,16 +102,12 @@ router.get('/compliment/rank',async(req,res,next)=>{
                 raw: true
             })
         )
-
-
     }
 });
 
 
-router.get('/compliment',async(req,res,next)=>{
-    const complimentE = await Compliment.findAll();
-        return res.json({complimentE});
-});
+
+
 
 router.get('/event',async(req,res,next)=>{
     try{
