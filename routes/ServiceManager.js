@@ -4,7 +4,7 @@ const m = require("../models/init-models");
 const sequelize = require("../models").sequelize;
 const models = m(sequelize);
 const Compliment = models.Compliment;
-
+const Leave = models.Leave;
 const Employee_notice = models.Employee_notice;
 const Employee_event = models.Event;
 //notice , event , compliment
@@ -34,7 +34,8 @@ router.get('/notice/:noticeID',async(req,res,next)=>{
             });
             res.send({notices});
     }
-})
+});
+
 
 router.get('/notice',async(req,res,next)=>{
     try{
@@ -45,7 +46,8 @@ router.get('/notice',async(req,res,next)=>{
         next(error);
     }
 });
-    
+
+
 // router.get('/notice/:noticeID',async(req,res,next)=>{
 //     const {noticeID} = req.params;
 //     try{
@@ -86,13 +88,11 @@ router.get('/compliment/:employeeID(\\d+)',async(req,res,next)=>{
 
 router.get('/compliment/rank',async(req,res,next)=>{
     {
-        //극장 - 날짜별 영화, 상영스케줄 목록 조회
         return res.json ( await sequelize.query(
             `SELECT name, compliment_count from Compliment
             inner join Employee E on Compliment.employee_id = E.employee_id
             ORDER BY compliment_count DESC;`,
             {
-                
                 type: Sequelize.QueryTypes.SELECT,
                 raw: true
             })
@@ -100,7 +100,8 @@ router.get('/compliment/rank',async(req,res,next)=>{
 
 
     }
-})
+});
+
 
 router.get('/compliment',async(req,res,next)=>{
     const complimentE = await Compliment.findAll();
