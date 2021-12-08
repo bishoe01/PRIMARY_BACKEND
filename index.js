@@ -7,14 +7,15 @@ const attendant = require("./routes/attendant");
 const schedule = require("./routes/schedule");
 const auth = require("./routes/auth");
 const payment = require("./routes/payment");
+const employeeRouter = require("./routes/employee");
 
-const user = require('./routes/user/user');
-const movie = require('./routes/user/movie');
-const cast  = require('./routes/user/cast');
-const theater  = require('./routes/user/theater');
-const movieSchedule  = require('./routes/user/movieSchedule');
-const seat  = require('./routes/user/seat');
-const review  = require('./routes/user/review');
+const user = require("./routes/user/user");
+const movie = require("./routes/user/movie");
+const cast = require("./routes/user/cast");
+const theater = require("./routes/user/theater");
+const movieSchedule = require("./routes/user/movieSchedule");
+const seat = require("./routes/user/seat");
+const review = require("./routes/user/review");
 
 const RequestManager = require("./routes/RequestManager");
 const ServiceManagerRouter = require("./routes/ServiceManager");
@@ -48,13 +49,14 @@ app.use("/reviews", review);
 
 app.use("/attendant", attendant);
 app.use("/schedule", schedule);
+app.use("/employee", employeeRouter);
 
 app.use("/service", ServiceManagerRouter);
 app.use("/suggestion", SuggestManager);
-app.use("/request",RequestManager);
+app.use("/request", RequestManager);
 app.use("/menu", MenuviewsRouter);
 app.use("/check", CheckManagerRouter);
-app.use("/employee", ScheduleRouter);
+// app.use("/employee", ScheduleRouter);
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -68,4 +70,3 @@ app.use(function (req, res, next) {
 app.listen(PORT, () => {
   console.log(`listening at ${PORT}`);
 });
-
