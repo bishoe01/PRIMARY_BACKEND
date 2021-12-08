@@ -21,15 +21,35 @@ const Employee_event = models.Event;
 //     }
 // });
 
-router.get('/notice/:noticeID',async(req,res,next)=>{
-    const {noticeID} = req.params;
+
+router.patch('/notice/:emplyee_notice_id',async(req,res,next)=>{
+    const {emplyee_notice_id} = req.params;
+    const {notice_writer} = req.body;
+    const {notice_title} = req.body;
+    const {notice_content} = req.body;
+    
+    try{
+        await Employee_notice.update({
+            notice_title, notice_content,notice_writer
+        },{where : {employee_notice_id : emplyee_notice_id}});
+        const updateresult =  await Employee_notice.findAll(
+            {where: {employee_notice_id : emplyee_notice_id}}
+        );
+        res.json(updateresult);
+    }catch(error){
+        next(error);
+    }
+});
+
+router.get('/notice/:emplyee_notice_id',async(req,res,next)=>{
+    const {emplyee_notice_id} = req.params;
     {   await sequelize.query(`UPDATE Employee_notice SET view_count=view_count+1 where employee_notice_id=1;`,
             {
                 type: Sequelize.QueryTypes.UPDATE,
                 raw: true
             })
         const notices = await Employee_notice.findAll({
-                where : {employee_notice_id :noticeID }
+                where : {employee_notice_id :emplyee_notice_id }
             });
             res.send({notices});
     }
@@ -118,23 +138,7 @@ router.get('/event',async(req,res,next)=>{
     }
 });
 
-router.patch('/notice/:emplyee_notice_id',async(req,res,next)=>{
-    const {emplyee_notice_id} = req.params;
-    const {notice_writer} = req.body;
-    const {notice_title} = req.body;
-    const {notice_content} = req.body;
-    
-    try{
-        await Employee_notice.update({
-            notice_title, notice_content,notice_writer
-        },{where : {employee_notice_id : emplyee_notice_id}});
-        const updateresult =  await Employee_notice.findByPk(employee_notice_id);
-        res.json(updateresult);
-    }catch(error){
-        console.log.error(error);
-        next(error);
-    }
-});
+
 
 
 router.post('/notice', function(req,res){
