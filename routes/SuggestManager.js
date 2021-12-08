@@ -4,12 +4,14 @@ const sequelize = require("../models").sequelize;
 const models = m(sequelize);
 const Employee_Suggestion = models.Suggestion;
 const router = express.Router();
+
+
 router.get('/',async(req,res,next)=>{
     try{
         const suggestions = await Employee_Suggestion.findAll(
             {include :{model: models.Employee, as: "employee",attributes:['name']}}
         );
-        res.send({suggestions});
+        res.json({suggestions});
     }catch(error){
         next(error);
     }
@@ -22,7 +24,7 @@ router.get('/:suggestionID',async(req,res,next)=>{
             include :{model: models.Employee, as: "employee",attributes:['name']},
             where : {suggestion_id : suggestionID}
         });
-        res.send({suggestions});
+        res.json({suggestions});
     }catch(error){
         next(error);
     }
