@@ -19,14 +19,14 @@ class Employee extends Sequelize.Model {
       comment: "이름"
     },
     email: {
-      type: DataTypes.STRING(20),
+      type: DataTypes.STRING(30),
       allowNull: true,
       comment: "이메일"
     },
     gender: {
       type: DataTypes.CHAR(1),
       allowNull: false,
-      comment: "성별"
+      comment: "1 : 남자 2: 여자"
     },
     birth: {
       type: DataTypes.DATEONLY,
@@ -46,7 +46,7 @@ class Employee extends Sequelize.Model {
     rank: {
       type: DataTypes.CHAR(1),
       allowNull: false,
-      comment: "직급"
+      comment: "직급 1 : 평사원 2:대리 3: 팀장"
     },
     leaves_left: {
       type: DataTypes.INTEGER,
@@ -78,7 +78,8 @@ class Employee extends Sequelize.Model {
     },
     menu_want: {
       type: DataTypes.CHAR(1),
-      allowNull: true
+      allowNull: true,
+      defaultValue: "0"
     }
   }, {
     sequelize,
