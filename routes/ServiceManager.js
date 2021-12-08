@@ -22,24 +22,52 @@ const Employee_event = models.Event;
 // });
 
 
-router.patch('/notice/:emplyee_notice_id',async(req,res,next)=>{
-    const {emplyee_notice_id} = req.params;
+// router.patch('/notice/:emplyee_notice_id',async(req,res,next)=>{
+//     const {employee_notice_id} = req.params;
+//     const {is_deleted} = req.body;
+//         try
+//         {
+//         await Employee_notice.update({
+//             is_deleted
+//         },{where : {employee_notice_id : employee_notice_id}});
+//         res.send("is_deleted");
+//     }catch(error){
+//         next(error);
+//     }
+// });
+
+
+router.patch('/notice/:employee_notice_id',async(req,res,next)=>{
+    const {employee_notice_id} = req.params;
     const {notice_writer} = req.body;
     const {notice_title} = req.body;
     const {notice_content} = req.body;
-    
-    try{
+    const {is_deleted} = req.body;
+    if(is_deleted == 'Y'){try
+        {
+        await Employee_notice.update({
+            is_deleted
+        },{where : {employee_notice_id : employee_notice_id}});
+        res.send("is_deleted");
+    }catch(error){
+        next(error);
+    }}
+    else{
+        try
+        {
         await Employee_notice.update({
             notice_title, notice_content,notice_writer
-        },{where : {employee_notice_id : emplyee_notice_id}});
+        },{where : {employee_notice_id : employee_notice_id}});
         const updateresult =  await Employee_notice.findAll(
-            {where: {employee_notice_id : emplyee_notice_id}}
+            {where: {employee_notice_id : employee_notice_id}}
         );
         res.json(updateresult);
     }catch(error){
         next(error);
-    }
+    }}
 });
+
+
 
 router.get('/notice/:emplyee_notice_id',async(req,res,next)=>{
     const {emplyee_notice_id} = req.params;
@@ -49,7 +77,7 @@ router.get('/notice/:emplyee_notice_id',async(req,res,next)=>{
                 raw: true
             })
         const notices = await Employee_notice.findAll({
-                where : {employee_notice_id :emplyee_notice_id }
+                where : {employee_notice_id :emplyee_notice_id, is_deleted : 'N'}
             });
             res.send({notices});
     }
@@ -58,7 +86,9 @@ router.get('/notice/:emplyee_notice_id',async(req,res,next)=>{
 
 router.get('/notice',async(req,res,next)=>{
     try{
-        const notices = await Employee_notice.findAll();
+        const notices = await Employee_notice.findAll(
+            {where : {is_deleted : 'N'}}
+        );
         res.send({notices});
     }catch(error){
         console.log.error(error);
