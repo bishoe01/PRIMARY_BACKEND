@@ -14,7 +14,7 @@ class Suggestion extends Sequelize.Model {
       comment: "건의id"
     },
     suggestion_type: {
-      type: DataTypes.CHAR(1),
+      type: DataTypes.CHAR(2),
       allowNull: false,
       comment: "건의유형"
     },
@@ -32,11 +32,6 @@ class Suggestion extends Sequelize.Model {
       type: DataTypes.STRING(100),
       allowNull: true,
       comment: "결과"
-    },
-    date: {
-      type: DataTypes.DATEONLY,
-      allowNull: false,
-      comment: "날짜"
     },
     created_at: {
       type: DataTypes.DATE,

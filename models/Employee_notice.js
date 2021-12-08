@@ -19,7 +19,7 @@ class Employee_notice extends Sequelize.Model {
       comment: "공지 제목"
     },
     notice_content: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.TEXT,
       allowNull: false,
       comment: "공지 내용"
     },
@@ -46,6 +46,7 @@ class Employee_notice extends Sequelize.Model {
     view_count: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      defaultValue: 0,
       comment: "직원 공지글 조회수\n"
     }
   }, {
