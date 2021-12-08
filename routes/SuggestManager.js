@@ -11,7 +11,6 @@ router.get('/',async(req,res,next)=>{
         );
         res.send({suggestions});
     }catch(error){
-        console.log.error(error);
         next(error);
     }
 });
@@ -25,7 +24,6 @@ router.get('/:suggestionID',async(req,res,next)=>{
         });
         res.send({suggestions});
     }catch(error){
-        console.log.error(error);
         next(error);
     }
 });
@@ -41,7 +39,6 @@ router.patch('/:suggestionID',async(req,res,next)=>{
         const updateresult =  await Employee_Suggestion.findByPk(suggestionID);
         res.json(updateresult);
     }catch(error){
-        console.log.error(error);
         next(error);
     }
 });
