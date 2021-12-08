@@ -53,6 +53,7 @@ class Notice extends Sequelize.Model {
     view_count: {
       type: DataTypes.INTEGER,
       allowNull: true,
+      defaultValue: 0,
       comment: "조회수\n"
     }
   }, {
