@@ -59,7 +59,8 @@ router.patch('/notice/:employee_notice_id',async(req,res,next)=>{
             notice_title, notice_content,notice_writer
         },{where : {employee_notice_id : employee_notice_id}});
         const updateresult =  await Employee_notice.findAll(
-            {where: {employee_notice_id : employee_notice_id}}
+            {where: {employee_notice_id : employee_notice_id},
+            order :[['created_at','ASC']]}
         );
         res.json(updateresult);
     }catch(error){
@@ -77,7 +78,8 @@ router.get('/notice/:emplyee_notice_id',async(req,res,next)=>{
                 raw: true
             })
         const notices = await Employee_notice.findAll({
-                where : {employee_notice_id :emplyee_notice_id, is_deleted : 'N'}
+                where : {employee_notice_id :emplyee_notice_id, is_deleted : 'N'},
+                order :[['created_at','ASC']]
             });
             res.send({notices});
     }
@@ -85,9 +87,10 @@ router.get('/notice/:emplyee_notice_id',async(req,res,next)=>{
 
 
 router.get('/notice',async(req,res,next)=>{
+    
     try{
         const notices = await Employee_notice.findAll(
-            {where : {is_deleted : 'N'}}
+            {where : {is_deleted : 'N'},order :[['created_at','ASC']]}
         );
         res.send({notices});
     }catch(error){
